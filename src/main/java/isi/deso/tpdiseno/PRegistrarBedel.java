@@ -16,6 +16,10 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     
     public PRegistrarBedel() {
         initComponents();
+        //vacio0.setVisible(false);
+        //longitud0.setVisible(false);
+        //notDigit0.setVisible(false);
+        //notDigit00.setVisible(false);
     }
 
     
@@ -55,6 +59,9 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         notDigit1 = new javax.swing.JLabel();
         notDigit0 = new javax.swing.JLabel();
         notDigit00 = new javax.swing.JLabel();
+        notDigit11 = new javax.swing.JLabel();
+        contraseñaLabel = new javax.swing.JLabel();
+        confirmarContrasena = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MENU ADMINISTRADOR | REGISTRAR BEDEL");
@@ -103,7 +110,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("CONTRASEÑA: (*)");
-        Panel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, -1, -1));
+        Panel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 335, -1, 30));
 
         turno.setBackground(new java.awt.Color(242, 240, 235));
         turno.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -255,39 +262,39 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
         vacio1.setForeground(new java.awt.Color(255, 0, 0));
         vacio1.setToolTipText("");
-        Panel1.add(vacio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 180, 20));
+        Panel1.add(vacio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 200, 20));
 
         vacio0.setForeground(new java.awt.Color(255, 0, 0));
         vacio0.setToolTipText("");
-        Panel1.add(vacio0, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 135, 180, 20));
+        Panel1.add(vacio0, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 135, 200, 20));
 
         vacio5.setForeground(new java.awt.Color(255, 0, 0));
         vacio5.setToolTipText("");
-        Panel1.add(vacio5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 180, 20));
+        Panel1.add(vacio5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 380, 200, 20));
 
         vacio2.setForeground(new java.awt.Color(255, 0, 0));
         vacio2.setToolTipText("");
-        Panel1.add(vacio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 180, 20));
+        Panel1.add(vacio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 200, 20));
 
         vacio3.setForeground(new java.awt.Color(255, 0, 0));
         vacio3.setToolTipText("");
-        Panel1.add(vacio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 180, 20));
+        Panel1.add(vacio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 200, 20));
 
         vacio4.setForeground(new java.awt.Color(255, 0, 0));
         vacio4.setToolTipText("");
-        Panel1.add(vacio4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 370, 180, 20));
+        Panel1.add(vacio4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 370, 200, 20));
 
         longitud5.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud5.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 380, 230, 30));
+        Panel1.add(longitud5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 380, 230, 20));
 
         longitud0.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud0.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud0, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 230, 30));
+        Panel1.add(longitud0, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 230, 20));
 
         longitud1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud1.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 130, 230, 30));
+        Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 230, 20));
 
         longitud3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud3.setForeground(new java.awt.Color(255, 0, 0));
@@ -295,19 +302,29 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
         longitud4.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud4.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 290, 30));
+        Panel1.add(longitud4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 370, 290, 20));
 
         notDigit1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit1.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 130, 200, 30));
+        Panel1.add(notDigit1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 210, 20));
 
         notDigit0.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit0.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit0, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 200, 30));
+        Panel1.add(notDigit0, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 200, 20));
 
         notDigit00.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit00.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit00, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 200, 30));
+        Panel1.add(notDigit00, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 200, 20));
+
+        notDigit11.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        notDigit11.setForeground(new java.awt.Color(255, 0, 0));
+        Panel1.add(notDigit11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 200, 20));
+
+        contraseñaLabel.setForeground(new java.awt.Color(255, 0, 0));
+        Panel1.add(contraseñaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 300, 20));
+
+        confirmarContrasena.setForeground(new java.awt.Color(255, 0, 0));
+        Panel1.add(confirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 390, 200, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -340,13 +357,18 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_apellidoActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        
+        System.exit(0);
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
         
+        this.limpiarLabels();
         boolean flag0 = false;
         boolean flag1 = false;
+        boolean fAp= false;
+        boolean fN=false;
+        boolean fC=false;
+        boolean fCC=false;
         gestorBedel = new GestorBedel();
         ArrayList<String> datos = new ArrayList();
         datos.add(apellido.getText());
@@ -361,9 +383,11 @@ public class PRegistrarBedel extends javax.swing.JFrame {
             if(!(gestorBedel.validarVacio(datos.get(i)))){                
                 switch(i){
                     case 0:
+                        fAp=true;
                         vacio0.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 1:
+                        fN=true;
                         vacio1.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 2:
@@ -373,9 +397,11 @@ public class PRegistrarBedel extends javax.swing.JFrame {
                         vacio3.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 4:
+                        fC=true;
                         vacio4.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 5:
+                        fCC=true;
                         vacio5.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                 }        
@@ -403,35 +429,47 @@ public class PRegistrarBedel extends javax.swing.JFrame {
                 }
             }
         }
-        
-        if(!gestorBedel.validarNotDigit(apellido.getText())){
-            if(flag0){
-                notDigit00.setText("NO SE PUEDEN INGRESAR NUMEROS");
-            }else{ 
-                notDigit0.setText("NO SE PUEDEN INGRESAR NUMEROS");
+        if(!fAp){
+            if(!gestorBedel.validarNotDigit(apellido.getText())){
+                if(flag0){
+                   notDigit00.setText("SOLO SE PUEDEN INGRESAR LETRAS");
+                }else{ 
+                  notDigit0.setText("SOLO SE PUEDEN INGRESAR LETRAS");
+                }
             }
         }
-        
-        if(!gestorBedel.validarNotDigit(nombre1.getText())){
-            if(flag1){
-                notDigit1.setBounds(580, 150, 230, 30);
-                notDigit1.setText("NO SE PUEDEN INGRESAR NUMEROS");
-            }else{ 
-                notDigit1.setText("NO SE PUEDEN INGRESAR NUMEROS");
-            }
+        if(!fN){
+            if(!gestorBedel.validarNotDigit(nombre1.getText())){
+                if(flag1){
+                    notDigit11.setText("SOLO SE PUEDEN INGRESAR LETRAS");
+                }else{ 
+                  notDigit1.setText("SOLO SE PUEDEN INGRESAR LETRAS");
+                }
+             }
         }
         
+        if(!fC){
+            if(!gestorBedel.validarContrasena(contraseña.getText())){
+            contraseñaLabel.setText("LA CONTRASEÑA NO CUMPLE CON EL CRITERIO");
+            }
+        }else{
+            if(!fCC){
+                if(!gestorBedel.validarConfirmarContrasena(contraseña.getText(), confirmarContraseña.getText())){
+                confirmarContrasena.setText("LA CONTRASEÑA NO COINCIDE");
+                }
+            }
+        }
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void apellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellidoKeyPressed
         if(apellido.getText().equals("Escribe aquí...")){
-            apellido.setText(" ");
+            apellido.setText("");
         }
     }//GEN-LAST:event_apellidoKeyPressed
 
     private void usuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioKeyPressed
         if(usuario.getText().equals("Escribe aquí...")){
-            usuario.setText(" ");
+            usuario.setText("");
         }
     }//GEN-LAST:event_usuarioKeyPressed
 
@@ -512,14 +550,36 @@ public class PRegistrarBedel extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void limpiarLabels(){
+        vacio0.setText("");
+        vacio1.setText("");
+        vacio2.setText("");
+        vacio3.setText("");
+        vacio4.setText("");
+        vacio5.setText("");
+        longitud0.setText("");
+        longitud1.setText("");
+        longitud3.setText("");
+        longitud4.setText("");
+        longitud5.setText("");
+        notDigit00.setText("");
+        notDigit0.setText("");
+        notDigit11.setText("");
+        notDigit1.setText("");
+        contraseñaLabel.setText("");
+        confirmarContrasena.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel1;
     private javax.swing.JTextField apellido;
     private javax.swing.JButton cancelar;
     private javax.swing.JButton confirmar;
+    private javax.swing.JLabel confirmarContrasena;
     private javax.swing.JPasswordField confirmarContraseña;
     private javax.swing.JPasswordField contraseña;
+    private javax.swing.JLabel contraseñaLabel;
     private javax.swing.JButton infoContraseña;
     private javax.swing.JButton infoUsuario;
     private javax.swing.JLabel jLabel1;
@@ -538,6 +598,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel notDigit0;
     private javax.swing.JLabel notDigit00;
     private javax.swing.JLabel notDigit1;
+    private javax.swing.JLabel notDigit11;
     private javax.swing.JComboBox<String> turno;
     private javax.swing.JTextField usuario;
     private javax.swing.JLabel vacio0;

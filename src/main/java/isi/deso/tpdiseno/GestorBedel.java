@@ -13,7 +13,7 @@ public class GestorBedel {
     }*/
    
     public boolean validarVacio(String str){
-       boolean flag=true;
+        boolean flag=true;
         if(str.isBlank() || str.equals("Escribe aquí...") || str.equals("Seleccionar")){
             flag=false;
         }
@@ -33,7 +33,7 @@ public class GestorBedel {
                 if(str.length()>5){flag=false;}
                 break;
             case 4:
-                if(str.length()>5){flag=false;}
+                if(str.length()>30){flag=false;}
                 break;
             case 5:
                 if(str.length()>5){flag=false;}
@@ -44,11 +44,44 @@ public class GestorBedel {
     
     public boolean validarNotDigit(String str){
         boolean flag=true;
-        for(int i=0; i<str.length(); i++){
-            if( isDigit(str.charAt(i)) ){
-                flag=false;
-            }
+        if(!str.matches("[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+")){
+            flag = false;
         }
+        
+        return flag;
+    }
+    
+    public boolean validarContrasena(String str){
+       boolean flag=true;
+       int cantMayusculas=0, cantNumeros=0;
+       
+        if(str.length()>7){
+           for(int i=0; i<str.length(); i++){
+               if(str.charAt(i)>64 && str.charAt(i)<91){
+                   cantMayusculas++;
+               }else{
+                    if(str.charAt(i)>47 && str.charAt(i)<58){
+                        cantNumeros++;
+                    }
+               }
+           } 
+           if(!(cantNumeros>0 && cantMayusculas>0)){
+               flag=false;
+           }
+        }else{
+           flag = false;
+        }
+
+        return flag;
+    }
+    
+    public boolean validarConfirmarContrasena(String str1, String str2){
+        boolean flag=true;
+        
+        if(str1.compareTo(str2)!=0){
+            flag=false;
+        }
+        
         return flag;
     }
 }
