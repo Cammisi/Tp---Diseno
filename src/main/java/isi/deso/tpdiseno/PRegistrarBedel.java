@@ -55,7 +55,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         longitud0 = new javax.swing.JLabel();
         longitud1 = new javax.swing.JLabel();
         longitud3 = new javax.swing.JLabel();
-        longitud4 = new javax.swing.JLabel();
         notDigit1 = new javax.swing.JLabel();
         notDigit0 = new javax.swing.JLabel();
         notDigit00 = new javax.swing.JLabel();
@@ -191,12 +190,13 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
         infoUsuario.setBackground(new java.awt.Color(242, 240, 235));
         infoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
+        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER AL MENOS 4 CARACTERES CON AL MENOS UN NUMERO Y UNA LETRA </h4>\n</body>\n</html>");
         infoUsuario.setBorder(null);
         Panel1.add(infoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 225, -1, -1));
 
         infoContraseña.setBackground(new java.awt.Color(242, 240, 235));
         infoContraseña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
-        infoContraseña.setToolTipText("CANDE MI AMORRR");
+        infoContraseña.setToolTipText("<html>\n<head>\n<style> \n.infoContraseña{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoContraseña\">DEBE CONTENER ENTRE 8 Y 30 CARACTERES, ENTRE ELLOS AL MENOS UNA MAYUSCULA Y UN NUMERO </h4>\n</body>\n</html>\n\n\n\n");
         infoContraseña.setBorder(null);
         infoContraseña.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -260,71 +260,75 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         });
         Panel1.add(nombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 100, 150, 30));
 
+        vacio1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio1.setForeground(new java.awt.Color(255, 0, 0));
         vacio1.setToolTipText("");
         Panel1.add(vacio1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 200, 20));
 
+        vacio0.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio0.setForeground(new java.awt.Color(255, 0, 0));
         vacio0.setToolTipText("");
         Panel1.add(vacio0, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 135, 200, 20));
 
+        vacio5.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio5.setForeground(new java.awt.Color(255, 0, 0));
         vacio5.setToolTipText("");
-        Panel1.add(vacio5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 380, 200, 20));
+        Panel1.add(vacio5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 200, 20));
 
+        vacio2.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio2.setForeground(new java.awt.Color(255, 0, 0));
         vacio2.setToolTipText("");
         Panel1.add(vacio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 200, 20));
 
+        vacio3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio3.setForeground(new java.awt.Color(255, 0, 0));
         vacio3.setToolTipText("");
         Panel1.add(vacio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 200, 20));
 
+        vacio4.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio4.setForeground(new java.awt.Color(255, 0, 0));
         vacio4.setToolTipText("");
         Panel1.add(vacio4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 370, 200, 20));
 
         longitud5.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud5.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 380, 230, 20));
+        Panel1.add(longitud5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 230, 20));
 
         longitud0.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud0.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud0, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 230, 20));
+        Panel1.add(longitud0, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 135, 230, 20));
 
         longitud1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud1.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 230, 20));
+        Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 230, 20));
 
         longitud3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud3.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 230, 30));
-
-        longitud4.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        longitud4.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 370, 290, 20));
+        Panel1.add(longitud3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 230, 20));
 
         notDigit1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit1.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 210, 20));
+        Panel1.add(notDigit1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 210, 20));
 
         notDigit0.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit0.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit0, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 200, 20));
+        Panel1.add(notDigit0, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 200, 20));
 
         notDigit00.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit00.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit00, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 200, 20));
+        Panel1.add(notDigit00, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 155, 200, 20));
 
         notDigit11.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit11.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(notDigit11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 200, 20));
+        Panel1.add(notDigit11, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 155, 200, 20));
 
+        contraseñaLabel.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         contraseñaLabel.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(contraseñaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 370, 300, 20));
+        Panel1.add(contraseñaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 370, 300, 20));
 
+        confirmarContrasena.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         confirmarContrasena.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(confirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 390, 200, 20));
+        Panel1.add(confirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 200, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -419,9 +423,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
                     case 3:
                         longitud3.setText("EXCEDISTE EL LIMITE DE CARACTERES (20)");
                         break;
-                    case 4:
-                        longitud4.setText("EXCEDISTE EL LIMITE DE CARACTERES (30)");
-                        break;
                     case 5:
                         longitud5.setText("EXCEDISTE EL LIMITE DE CARACTERES (30)");
                         break;
@@ -498,7 +499,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_contraseñaActionPerformed
 
     private void infoContraseñaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoContraseñaMouseMoved
-       // infoContraseña.createToolTip();
+      //infoContraseña.createToolTip();
         //infoContraseña.setToolTipText("LA CONTRASEÑA DEBE CONTENER AL MENOS 8 CARACTERES, ENTRE ELLOS AL MENOS UNA MAYUSCULA Y UN NUMERO");
     }//GEN-LAST:event_infoContraseñaMouseMoved
 
@@ -561,7 +562,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         longitud0.setText("");
         longitud1.setText("");
         longitud3.setText("");
-        longitud4.setText("");
         longitud5.setText("");
         notDigit00.setText("");
         notDigit0.setText("");
@@ -592,7 +592,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel longitud0;
     private javax.swing.JLabel longitud1;
     private javax.swing.JLabel longitud3;
-    private javax.swing.JLabel longitud4;
     private javax.swing.JLabel longitud5;
     private javax.swing.JTextField nombre1;
     private javax.swing.JLabel notDigit0;
