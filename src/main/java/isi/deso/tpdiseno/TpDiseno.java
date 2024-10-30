@@ -11,19 +11,19 @@ public class TpDiseno {
     
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         
-        //PRegistrarBedel p = new PRegistrarBedel();
-        //p.setVisible(true);
-        //p.setLocationRelativeTo(null);
-        //p.setResizable(false);
-        Connection connection = DataBaseConnection.getConnection();
+        PRegistrarBedel p = new PRegistrarBedel();
+        p.setVisible(true);
+        p.setLocationRelativeTo(null);
+        p.setResizable(false);
+       /* Connection connection = DataBaseConnection.getConnection();
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("select nombreusuario from usuario");
         
-       while (rs.next()) {
+         while (rs.next()) {
             System.out.println(rs.getString("nombreusuario"));
-        }
+        }*/
         
-        connection.close(); 
+        
         /*try {
             
             if (connection != null && !connection.isClosed()) {

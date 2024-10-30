@@ -2,7 +2,10 @@
 package isi.deso.tpdiseno;
 
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -54,7 +57,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         longitud5 = new javax.swing.JLabel();
         longitud0 = new javax.swing.JLabel();
         longitud1 = new javax.swing.JLabel();
-        longitud3 = new javax.swing.JLabel();
+        validarUsuario = new javax.swing.JLabel();
         notDigit1 = new javax.swing.JLabel();
         notDigit0 = new javax.swing.JLabel();
         notDigit00 = new javax.swing.JLabel();
@@ -190,7 +193,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
         infoUsuario.setBackground(new java.awt.Color(242, 240, 235));
         infoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
-        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER AL MENOS 4 CARACTERES CON AL MENOS UN NUMERO Y UNA LETRA </h4>\n</body>\n</html>");
+        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER ENTRE 4 Y 20 CARACTERES CON AL MENOS UN NUMERO Y UNA LETRA </h4>\n</body>\n</html>");
         infoUsuario.setBorder(null);
         Panel1.add(infoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 225, -1, -1));
 
@@ -302,9 +305,9 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         longitud1.setForeground(new java.awt.Color(255, 0, 0));
         Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 230, 20));
 
-        longitud3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        longitud3.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(longitud3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 230, 20));
+        validarUsuario.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        validarUsuario.setForeground(new java.awt.Color(255, 0, 0));
+        Panel1.add(validarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 230, 20));
 
         notDigit1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit1.setForeground(new java.awt.Color(255, 0, 0));
@@ -367,12 +370,15 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
         
         this.limpiarLabels();
-        boolean flag0 = false;
-        boolean flag1 = false;
-        boolean fAp= false;
-        boolean fN=false;
-        boolean fC=false;
-        boolean fCC=false;
+        boolean limiteApellido = false;
+        boolean limiteNombre = false;
+        boolean vacioApellido= false;
+        boolean vacioNombre=false;
+        boolean vacioUsuario=false;
+        boolean vacioContraseña=false;
+        boolean vacioConfirmar=false;
+        boolean validarDatos=true;
+        boolean validarGeneral=false;
         gestorBedel = new GestorBedel();
         ArrayList<String> datos = new ArrayList();
         datos.add(apellido.getText());
@@ -384,64 +390,64 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         
         
         for(int i=0;i<6;i++){
-            if(!(gestorBedel.validarVacio(datos.get(i)))){                
+            if(!(gestorBedel.validarVacio(datos.get(i)))){ 
+                validarDatos=false;
                 switch(i){
                     case 0:
-                        fAp=true;
+                        vacioApellido=true;
                         vacio0.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 1:
-                        fN=true;
+                        vacioNombre=true;
                         vacio1.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 2:
                         vacio2.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 3:
+                        vacioUsuario=true;
                         vacio3.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 4:
-                        fC=true;
+                        vacioContraseña=true;
                         vacio4.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
                     case 5:
-                        fCC=true;
+                        vacioConfirmar=true;
                         vacio5.setText("ESTE CAMPO ES OBLIGATORIO");
                         break;
-                }        
+                    }       
             }else{
-                if(!(gestorBedel.validarLongitud(datos.get(i),i))){                
+                if(!(gestorBedel.validarLongitud(datos.get(i),i))){ 
+                    validarDatos=false;
                 switch(i){
                     case 0:
                         longitud0.setText("EXCEDISTE EL LIMITE DE CARACTERES (100)");
-                        flag0 = true;
+                        limiteApellido = true;
                         break;
                     case 1:
                         longitud1.setText("EXCEDISTE EL LIMITE DE CARACTERES (100)");
-                        flag1 = true;
-                        break;
-                    case 3:
-                        longitud3.setText("EXCEDISTE EL LIMITE DE CARACTERES (20)");
-                        break;
-                    case 5:
-                        longitud5.setText("EXCEDISTE EL LIMITE DE CARACTERES (30)");
-                        break;
-                    }     
+                        limiteNombre = true;
+                        break;     
                 }
             }
         }
-        if(!fAp){
+}
+        if(!vacioApellido){
             if(!gestorBedel.validarNotDigit(apellido.getText())){
-                if(flag0){
+                validarDatos=false;
+                if(limiteApellido){
                    notDigit00.setText("SOLO SE PUEDEN INGRESAR LETRAS");
                 }else{ 
                   notDigit0.setText("SOLO SE PUEDEN INGRESAR LETRAS");
                 }
             }
         }
-        if(!fN){
+        
+        if(!vacioNombre){
             if(!gestorBedel.validarNotDigit(nombre1.getText())){
-                if(flag1){
+                validarDatos=false;
+                if(limiteNombre){
                     notDigit11.setText("SOLO SE PUEDEN INGRESAR LETRAS");
                 }else{ 
                   notDigit1.setText("SOLO SE PUEDEN INGRESAR LETRAS");
@@ -449,17 +455,47 @@ public class PRegistrarBedel extends javax.swing.JFrame {
              }
         }
         
-        if(!fC){
+        if(!vacioContraseña){
             if(!gestorBedel.validarContrasena(contraseña.getText())){
-            contraseñaLabel.setText("LA CONTRASEÑA NO CUMPLE CON EL CRITERIO");
-            }
-        }else{
-            if(!fCC){
+                validarDatos=false;
+                contraseñaLabel.setText("NO CUMPLE CON EL CRITERIO");
+                vacio5.setText("");
+            }else if(!vacioConfirmar){
                 if(!gestorBedel.validarConfirmarContrasena(contraseña.getText(), confirmarContraseña.getText())){
-                confirmarContrasena.setText("LA CONTRASEÑA NO COINCIDE");
+                    validarDatos=false;
+                     confirmarContrasena.setText("LA CONTRASEÑA NO COINCIDE");
                 }
+            }      
+        }
+        
+        if(!(gestorBedel.validarCampoUsuario(usuario.getText())) && !vacioUsuario){
+            validarDatos=false;
+            validarUsuario.setText("NO CUMPLE CON EL CRITERIO");
+        }
+        
+        if(validarDatos){
+        try {
+           validarGeneral = gestorBedel.validarUsuario(usuario.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
+            if(validarGeneral){
+                String turnoS=(String)turno.getSelectedItem();
+                gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText());
+                System.out.print("Registra bedel");
+            //verde
+            
+            }else{
+                System.out.print("Mal");
+            //rojo
             }
         }
+        
+        
+            
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void apellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellidoKeyPressed
@@ -561,7 +597,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         vacio5.setText("");
         longitud0.setText("");
         longitud1.setText("");
-        longitud3.setText("");
+        validarUsuario.setText("");
         longitud5.setText("");
         notDigit00.setText("");
         notDigit0.setText("");
@@ -570,6 +606,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         contraseñaLabel.setText("");
         confirmarContrasena.setText("");
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel1;
@@ -591,7 +628,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel longitud0;
     private javax.swing.JLabel longitud1;
-    private javax.swing.JLabel longitud3;
     private javax.swing.JLabel longitud5;
     private javax.swing.JTextField nombre1;
     private javax.swing.JLabel notDigit0;
@@ -606,5 +642,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel vacio3;
     private javax.swing.JLabel vacio4;
     private javax.swing.JLabel vacio5;
+    private javax.swing.JLabel validarUsuario;
     // End of variables declaration//GEN-END:variables
 }

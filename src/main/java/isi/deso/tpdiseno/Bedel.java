@@ -3,14 +3,22 @@ package isi.deso.tpdiseno;
 
 
 public class Bedel extends Usuario{
-    private Turno turno;
+    private String turno;
     private boolean eliminado;
 
-    public Turno getTurno() {
+    public Bedel(String turno, boolean eliminado, String nombre, String apellido, String nombreUsuario, String contrasenia) {
+        super(nombre, apellido, nombreUsuario, contrasenia);
+        this.turno = turno;
+        this.eliminado = eliminado;
+    }
+
+    
+    
+    public String getTurno() {
         return turno;
     }
 
-    public void setTurno(Turno turno) {
+    public void setTurno(String turno) {
         this.turno = turno;
     }
 
