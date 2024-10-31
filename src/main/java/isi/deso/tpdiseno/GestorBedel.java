@@ -45,7 +45,7 @@ public class GestorBedel {
     
     public boolean validarNotDigit(String str){
         boolean flag=true;
-        if(!str.matches("[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+")){
+        if(!str.matches("[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+")){
             flag = false;
         }
         return flag;
@@ -92,6 +92,9 @@ public class GestorBedel {
                     if(str.charAt(i)>47 && str.charAt(i)<58){
                         cantNumeros++;
                     }
+               }
+               if(str.charAt(i)==' '){
+                   flag=false;
                }
            } 
            if(!(cantNumeros>0 && cantLetras>0)){

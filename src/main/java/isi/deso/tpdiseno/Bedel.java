@@ -11,8 +11,6 @@ public class Bedel extends Usuario{
         this.turno = turno;
         this.eliminado = eliminado;
     }
-
-    
     
     public String getTurno() {
         return turno;
@@ -29,6 +27,4 @@ public class Bedel extends Usuario{
     public void setEliminado(boolean eliminado) {
         this.eliminado = eliminado;
     }
-    
-    
 }

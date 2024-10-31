@@ -22,26 +22,21 @@ public class BedelDaoImp implements BedelDAO{
             Connection connection = getConnection();
             
             Statement stmt = connection.createStatement();
-            /*ResultSet rsUser = stmt.executeQuery("insert into public.usuario "
-                    + "values( "+b.getNombreUsuario()+","+b.getContrasenia()+","
-                    +b.getApellido()+","+b.getNombre()+");");
-            ResultSet rsBedel = stmt.executeQuery("insert into public.bedel "
-                    + "values( "+b.getNombreUsuario()+","+b.getTurno()+","
-                    +b.isEliminado()+");");*/
+           
             String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
                 pstmtUser.setString(1, b.getNombreUsuario());
                 pstmtUser.setString(2, b.getContrasenia());
                 pstmtUser.setString(3, b.getApellido());
                 pstmtUser.setString(4, b.getNombre());
                 pstmtUser.executeUpdate();
             }
+            
             String sqlBedel = "INSERT INTO public.bedel (nombreusuario,  eliminado,turno) VALUES (?, ?, ?)";
-             try (PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
-                 pstmtBedel.setString(1, b.getNombreUsuario());
-                  pstmtBedel.setBoolean(2, b.isEliminado());
-                 pstmtBedel.setString(3, b.getTurno());
-              
+            try(PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
+                pstmtBedel.setString(1, b.getNombreUsuario());
+                pstmtBedel.setBoolean(2, b.isEliminado());
+                pstmtBedel.setString(3, b.getTurno());
                 pstmtBedel.executeUpdate();
             }
             
@@ -78,11 +73,11 @@ public class BedelDaoImp implements BedelDAO{
             Class.forName(driver);
             con = (Connection) DriverManager.getConnection(URL, USER, PASSWORD);
             if(con != null){
-            System.out.println("Conexión exitosa a la base de datos.");
+                System.out.println("Conexión exitosa a la base de datos.");
             }
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Error al conectar a la base de datos: " + e.getMessage());
-            throw e; // Lanza la excepción para poder manejarla desde otras partes de la aplicación
+            throw e; 
         }
         return con;
     }

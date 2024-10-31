@@ -2,12 +2,17 @@
 package isi.deso.tpdiseno;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 
 public class PRegistrarBedel extends javax.swing.JFrame {
@@ -193,7 +198,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
         infoUsuario.setBackground(new java.awt.Color(242, 240, 235));
         infoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
-        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER ENTRE 4 Y 20 CARACTERES CON AL MENOS UN NUMERO Y UNA LETRA </h4>\n</body>\n</html>");
+        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER ENTRE 4 Y 20 CARACTERES (SIN ESPACIOS) CON AL MENOS UN NUMERO Y UNA LETRA</h4>\n</body>\n</html>");
         infoUsuario.setBorder(null);
         Panel1.add(infoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 225, -1, -1));
 
@@ -474,28 +479,24 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         }
         
         if(validarDatos){
-        try {
-           validarGeneral = gestorBedel.validarUsuario(usuario.getText());
-        } catch (SQLException ex) {
-            Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                validarGeneral = gestorBedel.validarUsuario(usuario.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
             if(validarGeneral){
                 String turnoS=(String)turno.getSelectedItem();
                 gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText());
-                System.out.print("Registra bedel");
-            //verde
-            
+                mensajeExito();
+                limpiarDatosBedel();
+                limpiarLabels();
             }else{
-                System.out.print("Mal");
-            //rojo
+                mensajeFracaso();
             }
-        }
-        
-        
-            
+        }  
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void apellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellidoKeyPressed
@@ -511,7 +512,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_usuarioKeyPressed
 
     private void turnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_turnoMouseClicked
-        turno.removeItem("Seleccionar");
+       // turno.removeItem("Seleccionar");
     }//GEN-LAST:event_turnoMouseClicked
 
     private void contraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contraseñaKeyPressed
@@ -588,6 +589,32 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         });
     }
     
+    public void mensajeExito(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "SE REGISTRO EL BEDEL CORRECTAMENTE.","",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/aceptar.png",32,32));
+    }
+    
+    public void mensajeFracaso(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "NO SE PUDO REGISTRAR EL BEDEL.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void limpiarDatosBedel(){
+        apellido.setText("Escribe aquí...");
+        nombre1.setText("Escribe aquí...");
+        contraseña.setText("Escribe aquí...");
+        confirmarContraseña.setText("Escribe aquí...");
+        usuario.setText("Escribe aquí...");
+        turno.setSelectedItem("Seleccionar");
+       //turno.setSelectedIndex(0);
+    }
+    
     public void limpiarLabels(){
         vacio0.setText("");
         vacio1.setText("");
@@ -644,4 +671,9 @@ public class PRegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel vacio5;
     private javax.swing.JLabel validarUsuario;
     // End of variables declaration//GEN-END:variables
+
+    private Icon getIcon(String ruta, int w, int h) {
+        return new ImageIcon(new ImageIcon(getClass().getResource(ruta))
+                .getImage().getScaledInstance(w, h, 0));
+    }
 }
