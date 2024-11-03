@@ -19,9 +19,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
 
     GestorBedel gestorBedel;
     
-    
-    
-    
     public PRegistrarBedel() {
         initComponents();
         //vacio0.setVisible(false);
@@ -124,11 +121,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         turno.setForeground(new java.awt.Color(153, 153, 153));
         turno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Mañana", "Tarde", "Noche" }));
         turno.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        turno.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                turnoMouseClicked(evt);
-            }
-        });
         turno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 turnoActionPerformed(evt);
@@ -395,7 +387,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         
         
         for(int i=0;i<6;i++){
-            if(!(gestorBedel.validarVacio(datos.get(i)))){ 
+            if(!(validarVacio(datos.get(i)))){ 
                 validarDatos=false;
                 switch(i){
                     case 0:
@@ -423,7 +415,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
                         break;
                     }       
             }else{
-                if(!(gestorBedel.validarLongitud(datos.get(i),i))){ 
+                if(!(validarLongitud(datos.get(i),i))){ 
                     validarDatos=false;
                 switch(i){
                     case 0:
@@ -439,7 +431,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         }
 }
         if(!vacioApellido){
-            if(!gestorBedel.validarNotDigit(apellido.getText())){
+            if(!validarNotDigit(apellido.getText())){
                 validarDatos=false;
                 if(limiteApellido){
                    notDigit00.setText("SOLO SE PUEDEN INGRESAR LETRAS");
@@ -450,7 +442,7 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         }
         
         if(!vacioNombre){
-            if(!gestorBedel.validarNotDigit(nombre1.getText())){
+            if(!validarNotDigit(nombre1.getText())){
                 validarDatos=false;
                 if(limiteNombre){
                     notDigit11.setText("SOLO SE PUEDEN INGRESAR LETRAS");
@@ -473,30 +465,29 @@ public class PRegistrarBedel extends javax.swing.JFrame {
             }      
         }
         
-        if(!(gestorBedel.validarCampoUsuario(usuario.getText())) && !vacioUsuario){
+        if(!(validarCampoUsuario(usuario.getText())) && !vacioUsuario){
             validarDatos=false;
             validarUsuario.setText("NO CUMPLE CON EL CRITERIO");
         }
         
         if(validarDatos){
+            String turnoS=(String)turno.getSelectedItem();
             try {
-                validarGeneral = gestorBedel.validarUsuario(usuario.getText());
+                validarGeneral=gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText(),confirmarContraseña.getText());
             } catch (SQLException ex) {
                 Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(PRegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+            
             if(validarGeneral){
-                String turnoS=(String)turno.getSelectedItem();
-                gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText());
                 mensajeExito();
                 limpiarDatosBedel();
                 limpiarLabels();
             }else{
                 mensajeFracaso();
-            }
-        }  
+            } 
+        }
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void apellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellidoKeyPressed
@@ -510,10 +501,6 @@ public class PRegistrarBedel extends javax.swing.JFrame {
             usuario.setText("");
         }
     }//GEN-LAST:event_usuarioKeyPressed
-
-    private void turnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_turnoMouseClicked
-       // turno.removeItem("Seleccionar");
-    }//GEN-LAST:event_turnoMouseClicked
 
     private void contraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contraseñaKeyPressed
         if(contraseña.getText().equals("Escribe aquí...")){
@@ -603,6 +590,66 @@ public class PRegistrarBedel extends javax.swing.JFrame {
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
         JOptionPane.showMessageDialog(null, "NO SE PUDO REGISTRAR EL BEDEL.","¡ALGO SALIO MAL!",
                 JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public boolean validarVacio(String str){
+        boolean flag=true;
+        if(str.isBlank() || str.equals("Escribe aquí...") || str.equals("Seleccionar")){
+            flag=false;
+        }
+       return flag;  
+    }
+    
+    public boolean validarLongitud(String str,int i){
+        boolean flag=true;
+        switch(i){
+            case 0:
+                if(str.length()>100){flag=false;}
+                break;
+            case 1:
+                if(str.length()>100){flag=false;}
+                break;
+            case 3:
+                if(str.length()>20){flag=false;}
+                break;
+            case 5:
+                if(str.length()>30){flag=false;}
+                break;        
+        }
+        return flag;
+    }
+    
+    public boolean validarNotDigit(String str){
+        boolean flag=true;
+        if(!str.matches("[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+")){
+            flag = false;
+        }
+        return flag;
+    }
+    
+    public boolean validarCampoUsuario(String str){
+       boolean flag=true;
+       int cantLetras=0, cantNumeros=0;
+       if(str.length()>3 && str.length()<21){
+           for(int i=0; i<str.length(); i++){
+               if((str.charAt(i)>64 && str.charAt(i)<91) || (str.charAt(i)>94 && str.charAt(i)<123)){
+                   cantLetras++;
+               }else{
+                    if(str.charAt(i)>47 && str.charAt(i)<58){
+                        cantNumeros++;
+                    }
+               }
+               if(str.charAt(i)==' '){
+                   flag=false;
+               }
+           } 
+           if(!(cantNumeros>0 && cantLetras>0)){
+               flag=false;
+           }
+        }else{
+           flag = false;
+        }
+        return flag;
     }
     
     public void limpiarDatosBedel(){

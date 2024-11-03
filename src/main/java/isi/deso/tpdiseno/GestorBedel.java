@@ -7,15 +7,49 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class GestorBedel {
     
-    /*public boolean validarDatos(String apellido,String nombre, String usuario, String contrasenia,String cContrasenia){
-       boolean validado = false; 
-       return validado;
-    }*/
-   
+    public boolean crearBedel(String nombre,String apellido,String turno, String nombreUsuario,String contraseña,String confirmarContraseña) throws SQLException, ClassNotFoundException{
+        
+        boolean flag=true;
+        int i=0;
+        ArrayList<String> datos = new ArrayList();
+        datos.add(apellido);
+        datos.add(nombre);
+        datos.add(turno);
+        datos.add(nombreUsuario);
+        datos.add(contraseña);
+        datos.add(confirmarContraseña);
+       
+        while(i<6 && flag){
+            flag=validarVacio(datos.get(i));          
+            if((i==0 && flag) || (i==1 && flag)){
+                flag=validarLongitud(datos.get(i),i);
+                if(flag){flag=validarNotDigit(datos.get(i));}
+            }
+            if(i==3 && flag){
+                flag=validarCampoUsuario(datos.get(i));
+            }
+            if(i==4 && flag){
+                flag=validarContrasena(datos.get(i));
+                if(flag){flag=validarConfirmarContrasena(datos.get(i),datos.get(i+1));}
+            }
+            i++;
+        }
+
+        if(flag){flag=validarUsuario(nombreUsuario);}
+        
+        if(flag){
+            Bedel b = new Bedel(turno,false,nombre,apellido,nombreUsuario,contraseña);
+            BedelDaoImp bdao = new BedelDaoImp();         
+            bdao.registrarBedel(b);
+        }
+        return flag;
+    }
+    
     public boolean validarVacio(String str){
         boolean flag=true;
         if(str.isBlank() || str.equals("Escribe aquí...") || str.equals("Seleccionar")){
@@ -121,14 +155,5 @@ public class GestorBedel {
         connection.close(); 
         return distintos;
     }
-    
-   public void crearBedel(String nombre,String apellido,String turno, String nombreUsuario,String contraseña){
-        Bedel b = new Bedel(turno,false,nombre,apellido,nombreUsuario,contraseña);
-        BedelDaoImp bdao = new BedelDaoImp(); 
-       
-        bdao.registrarBedel(b);
-     
-   }
-   
-    
+
 }

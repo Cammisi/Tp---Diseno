@@ -8,7 +8,7 @@ public class TpDiseno {
         p.setVisible(true);
         p.setLocationRelativeTo(null);
         p.setResizable(false);
-       
+        
     }
 }
 
