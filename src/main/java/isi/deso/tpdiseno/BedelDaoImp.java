@@ -20,33 +20,65 @@ public class BedelDaoImp implements BedelDAO{
     public void registrarBedel(Bedel b){
         try {
             Connection connection = getConnection();
-            
-            Statement stmt = connection.createStatement();
-           
-            String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
-            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
-                pstmtUser.setString(1, b.getNombreUsuario());
-                pstmtUser.setString(2, b.getContrasenia());
-                pstmtUser.setString(3, b.getApellido());
-                pstmtUser.setString(4, b.getNombre());
-                pstmtUser.executeUpdate();
+            try {
+                
+                
+                //Statement stmt = connection.createStatement();
+                connection.setAutoCommit(false); //comienza la transacción.
+                String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
+                
+                try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
+                    pstmtUser.setString(1, b.getNombreUsuario());
+                    pstmtUser.setString(2, b.getContrasenia());
+                    pstmtUser.setString(3, b.getApellido());
+                    pstmtUser.setString(4, b.getNombre());
+                    pstmtUser.executeUpdate();
+                }
+                
+                String sqlBedel = "INSERT INTO public.bedel (nombreusuario,  eliminado,turno) VALUES (?, ?, ?)";
+                try(PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
+                    pstmtBedel.setString(1, b.getNombreUsuario());
+                    pstmtBedel.setBoolean(2, b.isEliminado());
+                    pstmtBedel.setString(3, b.getTurno());
+                    pstmtBedel.executeUpdate();
+                }
+                
+                
+                connection.commit();
+                System.out.println("Usuario y Bedel registrados exitosamente.");
+                /*
+                } catch (SQLException ex) {
+                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+            } catch (SQLException ex) {
+                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error en la transacción, se revertirán los cambios.", ex);
+                try {
+                    // Revertir la transacción en caso de error
+                    if(connection != null) {
+                        connection.rollback();
+                        System.out.println("Transacción revertida.");
+                    }
+                } catch (SQLException rollbackEx) {
+                    Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error al intentar hacer rollback.", rollbackEx);
+                }
+            } finally {
+                // Cerrar la conexión y restaurar el auto-commit
+                if (connection != null) {
+                    try {
+                        connection.setAutoCommit(true); // Restaurar auto-commit
+                        connection.close(); // Cerrar conexión
+                    } catch (SQLException e) {
+                        Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error al cerrar la conexión.", e);
+                    }
+                }
             }
-            
-            String sqlBedel = "INSERT INTO public.bedel (nombreusuario,  eliminado,turno) VALUES (?, ?, ?)";
-            try(PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
-                pstmtBedel.setString(1, b.getNombreUsuario());
-                pstmtBedel.setBoolean(2, b.isEliminado());
-                pstmtBedel.setString(3, b.getTurno());
-                pstmtBedel.executeUpdate();
-            }
-            
-            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     public void buscarBedel(){
         
