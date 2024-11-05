@@ -1,4 +1,5 @@
-package isi.deso.tpdiseno;
+package Daos;
+import Clases.Bedel;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;

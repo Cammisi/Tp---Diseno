@@ -1,4 +1,6 @@
-package isi.deso.tpdiseno;
+package DaosImplementacion;
+import Daos.BedelDAO;
+import Clases.Bedel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,8 +23,7 @@ public class BedelDaoImp implements BedelDAO{
         try {
             Connection connection = getConnection();
             try {
-                
-                
+
                 //Statement stmt = connection.createStatement();
                 connection.setAutoCommit(false); //comienza la transacción.
                 String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
@@ -69,6 +70,7 @@ public class BedelDaoImp implements BedelDAO{
                     try {
                         connection.setAutoCommit(true); // Restaurar auto-commit
                         connection.close(); // Cerrar conexión
+                        System.out.println("Se cerró la conexion con la bdd");
                     } catch (SQLException e) {
                         Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error al cerrar la conexión.", e);
                     }

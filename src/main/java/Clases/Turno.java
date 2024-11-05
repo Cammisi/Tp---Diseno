@@ -1,5 +1,5 @@
 
-package isi.deso.tpdiseno;
+package Clases;
 
 
 public enum Turno{

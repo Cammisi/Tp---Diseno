@@ -1,4 +1,4 @@
-package isi.deso.tpdiseno;
+package Gestores;
 //aca hay q importar las implementaciones
 
 public class GestorUsuario {

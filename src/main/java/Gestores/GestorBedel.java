@@ -1,7 +1,9 @@
 
-package isi.deso.tpdiseno;
+package Gestores;
 //importar implementaciones 
 
+import Clases.Bedel;
+import DaosImplementacion.BedelDaoImp;
 import static java.lang.Character.isDigit;
 import java.sql.Connection;
 import java.sql.ResultSet;
