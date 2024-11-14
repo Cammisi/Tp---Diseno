@@ -3,5 +3,7 @@ package Daos;
 
 
 public interface UsuarioDAO {
-   public void realizarAutentificacionYAutorizacion(); 
+    
+   public boolean esBedel(String usuario, String contrasena); 
+    public boolean esAdministrador(String usuario,String contrasena);
 }

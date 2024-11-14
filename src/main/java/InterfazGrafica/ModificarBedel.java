@@ -2,7 +2,6 @@
 package InterfazGrafica;
 
 import Gestores.GestorBedel;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.SQLException;
@@ -14,21 +13,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-public class RegistrarBedel extends javax.swing.JFrame {
+public class ModificarBedel extends javax.swing.JFrame {
 
-    private MenuAdministrador mAdm;
+    private BuscarBedel bBedel;
     
-    public RegistrarBedel() {
+    public ModificarBedel() {
         initComponents();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        PanelPrincipal = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         Panel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -42,7 +40,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
         apellido = new javax.swing.JTextField();
         cancelar = new javax.swing.JButton();
         confirmar = new javax.swing.JButton();
-        infoUsuario = new javax.swing.JButton();
         infoContraseña = new javax.swing.JButton();
         confirmarContraseña = new javax.swing.JPasswordField();
         contraseña = new javax.swing.JPasswordField();
@@ -51,12 +48,10 @@ public class RegistrarBedel extends javax.swing.JFrame {
         vacio0 = new javax.swing.JLabel();
         vacio5 = new javax.swing.JLabel();
         vacio2 = new javax.swing.JLabel();
-        vacio3 = new javax.swing.JLabel();
         vacio4 = new javax.swing.JLabel();
         longitud5 = new javax.swing.JLabel();
         longitud0 = new javax.swing.JLabel();
         longitud1 = new javax.swing.JLabel();
-        validarUsuario = new javax.swing.JLabel();
         notDigit1 = new javax.swing.JLabel();
         notDigit0 = new javax.swing.JLabel();
         notDigit00 = new javax.swing.JLabel();
@@ -65,7 +60,7 @@ public class RegistrarBedel extends javax.swing.JFrame {
         confirmarContrasena = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MENU ADMINISTRADOR | REGISTRAR BEDEL");
+        setTitle("MENU ADMINISTRADOR | MODIFICAR BEDEL");
 
         Panel1.setBackground(new java.awt.Color(242, 240, 235));
         Panel1.setPreferredSize(new java.awt.Dimension(830, 600));
@@ -103,7 +98,7 @@ public class RegistrarBedel extends javax.swing.JFrame {
 
         jLabel8.setBackground(new java.awt.Color(242, 240, 235));
         jLabel8.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
         jLabel8.setText("USUARIO: (*)");
         Panel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, -1, -1));
 
@@ -125,19 +120,15 @@ public class RegistrarBedel extends javax.swing.JFrame {
         });
         Panel1.add(turno, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 225, 150, 30));
 
+        usuario.setEditable(false);
         usuario.setBackground(new java.awt.Color(242, 240, 235));
         usuario.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         usuario.setForeground(new java.awt.Color(153, 153, 153));
         usuario.setText("Escribe aquí...");
-        usuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        usuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 3));
         usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usuarioActionPerformed(evt);
-            }
-        });
-        usuario.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                usuarioKeyPressed(evt);
             }
         });
         Panel1.add(usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 225, 150, 30));
@@ -184,12 +175,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
             }
         });
         Panel1.add(confirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 515, 130, 30));
-
-        infoUsuario.setBackground(new java.awt.Color(242, 240, 235));
-        infoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
-        infoUsuario.setToolTipText("<html>\n<head>\n<style> \n.infoUsuario{backgorund:white;color:black;}\n</style>\n<body>\n<h4 class=\"infoUsuario\">DEBE CONTENER ENTRE 4 Y 20 CARACTERES (SIN ESPACIOS) CON AL MENOS UN NUMERO Y UNA LETRA</h4>\n</body>\n</html>");
-        infoUsuario.setBorder(null);
-        Panel1.add(infoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 225, -1, -1));
 
         infoContraseña.setBackground(new java.awt.Color(242, 240, 235));
         infoContraseña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
@@ -277,11 +262,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
         vacio2.setToolTipText("");
         Panel1.add(vacio2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 200, 20));
 
-        vacio3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        vacio3.setForeground(new java.awt.Color(255, 0, 0));
-        vacio3.setToolTipText("");
-        Panel1.add(vacio3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 200, 20));
-
         vacio4.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         vacio4.setForeground(new java.awt.Color(255, 0, 0));
         vacio4.setToolTipText("");
@@ -298,10 +278,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
         longitud1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         longitud1.setForeground(new java.awt.Color(255, 0, 0));
         Panel1.add(longitud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 135, 230, 20));
-
-        validarUsuario.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
-        validarUsuario.setForeground(new java.awt.Color(255, 0, 0));
-        Panel1.add(validarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 230, 20));
 
         notDigit1.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         notDigit1.setForeground(new java.awt.Color(255, 0, 0));
@@ -327,39 +303,39 @@ public class RegistrarBedel extends javax.swing.JFrame {
         confirmarContrasena.setForeground(new java.awt.Color(255, 0, 0));
         Panel1.add(confirmarContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 200, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(Panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(Panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout PanelPrincipalLayout = new javax.swing.GroupLayout(PanelPrincipal);
-        PanelPrincipal.setLayout(PanelPrincipalLayout);
-        PanelPrincipalLayout.setHorizontalGroup(
-            PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 830, Short.MAX_VALUE)
-            .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanelPrincipalLayout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        PanelPrincipalLayout.setVerticalGroup(
-            PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 600, Short.MAX_VALUE)
-            .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanelPrincipalLayout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -367,18 +343,28 @@ public class RegistrarBedel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 830, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void setMenuAdministrador(MenuAdministrador mAdm){
-        this.mAdm = mAdm;
+    public void setBuscarBedel(BuscarBedel bBedel){
+        this.bBedel = bBedel;
     }
     
     private void turnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_turnoActionPerformed
@@ -388,12 +374,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
     private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_usuarioActionPerformed
-
-    private void usuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usuarioKeyPressed
-        if(usuario.getText().equals("Escribe aquí...")){
-            usuario.setText("");
-        }
-    }//GEN-LAST:event_usuarioKeyPressed
 
     private void apellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apellidoActionPerformed
         // TODO add your handling code here:
@@ -406,8 +386,9 @@ public class RegistrarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_apellidoKeyPressed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        mAdm.setVisible(true);
+        bBedel.setVisible(true);
         this.setVisible(false);
+        
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
@@ -445,10 +426,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
                     break;
                     case 2:
                     vacio2.setText("ESTE CAMPO ES OBLIGATORIO");
-                    break;
-                    case 3:
-                    vacioUsuario=true;
-                    vacio3.setText("ESTE CAMPO ES OBLIGATORIO");
                     break;
                     case 4:
                     vacioContraseña=true;
@@ -510,11 +487,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
             }
         }
 
-        if(!(validarCampoUsuario(usuario.getText())) && !vacioUsuario){
-            validarDatos=false;
-            validarUsuario.setText("NO CUMPLE CON EL CRITERIO");
-        }
-        
         if(validarDatos){
             String turnoS=(String)turno.getSelectedItem();
             try {
@@ -573,12 +545,13 @@ public class RegistrarBedel extends javax.swing.JFrame {
             nombre1.setText("");
         }
     }//GEN-LAST:event_nombre1KeyPressed
-    
+
+
     public void mensajeExito(){
         UIManager.put("OptionPane.background", new Color(242,240,235));
         //UIManager.put("Panel.background", new Color(242,240,235));
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
-        JOptionPane.showMessageDialog(null, "SE REGISTRO EL BEDEL CORRECTAMENTE.","",
+        JOptionPane.showMessageDialog(null, "SE MODIFICO EL BEDEL CORRECTAMENTE.","",
             JOptionPane.PLAIN_MESSAGE, getIcon("/aceptar.png",32,32));
     }
     
@@ -586,7 +559,7 @@ public class RegistrarBedel extends javax.swing.JFrame {
         UIManager.put("OptionPane.background", new Color(242,240,235));
         //UIManager.put("Panel.background", new Color(242,240,235));
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
-        JOptionPane.showMessageDialog(null, "NO SE PUDO REGISTRAR EL BEDEL.","¡ALGO SALIO MAL!",
+        JOptionPane.showMessageDialog(null, "NO SE PUDO MODIFICAR EL BEDEL.","¡ALGO SALIO MAL!",
                 JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
     }
     
@@ -607,9 +580,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
             case 1:
                 if(str.length()>100){flag=false;}
                 break;
-            case 3:
-                if(str.length()>20){flag=false;}
-                break;
             case 5:
                 if(str.length()>30){flag=false;}
                 break;        
@@ -621,31 +591,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
         boolean flag=true;
         if(!str.matches("[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]+")){
             flag = false;
-        }
-        return flag;
-    }
-    
-    public boolean validarCampoUsuario(String str){
-       boolean flag=true;
-       int cantLetras=0, cantNumeros=0;
-       if(str.length()>3 && str.length()<21){
-           for(int i=0; i<str.length(); i++){
-               if((str.charAt(i)>64 && str.charAt(i)<91) || (str.charAt(i)>94 && str.charAt(i)<123)){
-                   cantLetras++;
-               }else{
-                    if(str.charAt(i)>47 && str.charAt(i)<58){
-                        cantNumeros++;
-                    }
-               }
-               if(str.charAt(i)==' '){
-                   flag=false;
-               }
-           } 
-           if(!(cantNumeros>0 && cantLetras>0)){
-               flag=false;
-           }
-        }else{
-           flag = false;
         }
         return flag;
     }
@@ -664,12 +609,10 @@ public class RegistrarBedel extends javax.swing.JFrame {
         vacio0.setText("");
         vacio1.setText("");
         vacio2.setText("");
-        vacio3.setText("");
         vacio4.setText("");
         vacio5.setText("");
         longitud0.setText("");
         longitud1.setText("");
-        validarUsuario.setText("");
         longitud5.setText("");
         notDigit00.setText("");
         notDigit0.setText("");
@@ -678,11 +621,9 @@ public class RegistrarBedel extends javax.swing.JFrame {
         contraseñaLabel.setText("");
         confirmarContrasena.setText("");
     }
-  
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel1;
-    private javax.swing.JPanel PanelPrincipal;
     private javax.swing.JTextField apellido;
     private javax.swing.JButton cancelar;
     private javax.swing.JButton confirmar;
@@ -691,7 +632,6 @@ public class RegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JPasswordField contraseña;
     private javax.swing.JLabel contraseñaLabel;
     private javax.swing.JButton infoContraseña;
-    private javax.swing.JButton infoUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -700,6 +640,7 @@ public class RegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel longitud0;
     private javax.swing.JLabel longitud1;
     private javax.swing.JLabel longitud5;
@@ -713,14 +654,13 @@ public class RegistrarBedel extends javax.swing.JFrame {
     private javax.swing.JLabel vacio0;
     private javax.swing.JLabel vacio1;
     private javax.swing.JLabel vacio2;
-    private javax.swing.JLabel vacio3;
     private javax.swing.JLabel vacio4;
     private javax.swing.JLabel vacio5;
-    private javax.swing.JLabel validarUsuario;
     // End of variables declaration//GEN-END:variables
 
     private Icon getIcon(String ruta, int w, int h) {
         return new ImageIcon(new ImageIcon(getClass().getResource(ruta))
                 .getImage().getScaledInstance(w, h, 0));
     }
+    
 }

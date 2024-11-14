@@ -6,6 +6,7 @@ import Clases.Bedel;
 import DaosImplementacion.BedelDaoImp;
 import static java.lang.Character.isDigit;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -146,16 +147,17 @@ public class GestorBedel {
         boolean distintos=true;
         BedelDaoImp bdao = new BedelDaoImp(); 
         Connection connection = bdao.getConnection();
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("select nombreusuario from usuario");
-        
-        while (rs.next()) {
-            if(nombreUsuario.compareTo(rs.getString("nombreusuario"))==0){
-                distintos=false;
-            }
+        String sqlUsuario = "SELECT nombreusuario FROM public.bedel WHERE nombreusuario=?";
+        PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+        pstmtUser.setString(1, nombreUsuario);
+        ResultSet rs = pstmtUser.executeQuery();
+        if(rs.next()){
+            distintos=false;
         }
+        
         connection.close(); 
         return distintos;
     }
+    
 
 }
