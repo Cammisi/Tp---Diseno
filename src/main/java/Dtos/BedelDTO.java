@@ -1,26 +1,21 @@
 
-package Clases;
+package Dtos;
 
-
-public abstract class Usuario {
+public class BedelDTO {
     private String nombre;
     private String apellido;
+    private String turno;
     private String nombreUsuario;
-    private String contrasenia;
 
-    public Usuario(String nombre, String apellido, String nombreUsuario, String contrasenia) {
+    // Constructor
+    public BedelDTO(String nombre, String apellido, String turno, String nombreUsuario) {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
-    }
-    
-    public Usuario(String nombre, String apellido, String nombreUsuario){
-        this.nombre = nombre;
-        this.apellido = apellido;
+        this.turno = turno;
         this.nombreUsuario = nombreUsuario;
     }
-    
+
+    // Getters y Setters
     public String getNombre() {
         return nombre;
     }
@@ -37,6 +32,13 @@ public abstract class Usuario {
         this.apellido = apellido;
     }
 
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -45,15 +47,4 @@ public abstract class Usuario {
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-    
-    
-    
 }

@@ -82,21 +82,112 @@ public class BedelDaoImp implements BedelDAO{
             Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void buscarBedel(){
-        
+    
+    public ArrayList<Bedel> buscarBedel(String apellido,String turno) throws SQLException, ClassNotFoundException{
+        ArrayList<Bedel> bedeles = new ArrayList<>();
+         Connection connection = getConnection();
+        if((apellido.equals("Escribe aquí...") && turno.equals("Seleccionar")) || ((apellido.equals("") && turno.equals("Seleccionar")))){
+           
+            String sqlUsuario = "SELECT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                    + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                    + "WHERE b.eliminado = false";
+            PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+            ResultSet rs = pstmtUser.executeQuery();
+            
+            while(rs.next()){
+                String apellido1 = rs.getString("apellido");
+                String nombre = rs.getString("nombre");
+                String turno1 = rs.getString("turno");
+                String nombreUsuario = rs.getString("nombreusuario");
+
+                // Crea un objeto Bedel con los datos obtenidos
+                Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                // Agrega el objeto a la lista
+                bedeles.add(bedel);
+            }
+            
+        }else{    
+            if(apellido.equals("Escribe aquí...") || apellido.equals("")){
+                //Connection connection = getConnection();
+                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                        + "WHERE (b.eliminado = false) and b.turno = ?";
+                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+                pstmtUser.setString(1, turno);
+                ResultSet rs = pstmtUser.executeQuery();
+
+                while(rs.next()){
+                    String apellido1 = rs.getString("apellido");
+                    String nombre = rs.getString("nombre");
+                    String turno1 = rs.getString("turno");
+                    String nombreUsuario = rs.getString("nombreusuario");
+
+                    // Crea un objeto Bedel con los datos obtenidos
+                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                    // Agrega el objeto a la lista
+                    bedeles.add(bedel);
+                }  
+            }else if(turno.equals("Seleccionar")){
+               
+                //Connection connection = getConnection();
+                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                        + "WHERE (b.eliminado = false) and us.apellido= ?";
+                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+                pstmtUser.setString(1, apellido);
+                ResultSet rs = pstmtUser.executeQuery();
+
+                while(rs.next()){
+                    String apellido1 = rs.getString("apellido");
+                    String nombre = rs.getString("nombre");
+                    String turno1 = rs.getString("turno");
+                    String nombreUsuario = rs.getString("nombreusuario");
+
+                    // Crea un objeto Bedel con los datos obtenidos
+                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                    // Agrega el objeto a la lista
+                    bedeles.add(bedel);
+                }
+                
+            }else{
+                //Connection connection = getConnection();
+                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                        + "WHERE (b.eliminado = false) and ((us.apellido = ?) and (b.turno = ?))";
+                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+                pstmtUser.setString(1, apellido);
+                pstmtUser.setString(2, turno);
+                ResultSet rs = pstmtUser.executeQuery();
+
+                while(rs.next()){
+                    String apellido1 = rs.getString("apellido");
+                    String nombre = rs.getString("nombre");
+                    String turno1 = rs.getString("turno");
+                    String nombreUsuario = rs.getString("nombreusuario");
+
+                    // Crea un objeto Bedel con los datos obtenidos
+                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                    // Agrega el objeto a la lista
+                    bedeles.add(bedel);
+                }
+            }
+        }
+        connection.close();
+        return bedeles;
     }
+    
     public void modificarBedel(){
         
     }
     public void eliminarBedel(){
         
     }
-   /* public ArrayList<Bedel> buscarBedel(String apellido, Turno turno){
-        
-    }*/
-    /*public Bedel buscarBedel(String nombreUsuario){
-        
-    }*/
+    
+   
     public void actualizarBedel(Bedel bedel){
         
     }
@@ -115,6 +206,5 @@ public class BedelDaoImp implements BedelDAO{
         }
         return con;
     }
-    
     
 }

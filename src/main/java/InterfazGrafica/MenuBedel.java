@@ -133,7 +133,12 @@ public class MenuBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_buscarAulaActionPerformed
 
     private void listadoParaDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listadoParaDiaActionPerformed
-        // TODO add your handling code here:
+        ListadoReservasDia rPorDia = new ListadoReservasDia();
+        rPorDia.setMenuBedel(this);
+        rPorDia.setVisible(true);
+        rPorDia.setLocationRelativeTo(null);
+        rPorDia.setResizable(false);
+        this.setVisible(false);
     }//GEN-LAST:event_listadoParaDiaActionPerformed
 
 

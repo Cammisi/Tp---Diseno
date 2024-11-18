@@ -12,6 +12,11 @@ public class Bedel extends Usuario{
         this.eliminado = eliminado;
     }
     
+    public Bedel(String nombre, String apellido, String nombreUsuario, String turno){
+        super(nombre,apellido,nombreUsuario);
+        this.turno = turno;
+    }
+    
     public String getTurno() {
         return turno;
     }

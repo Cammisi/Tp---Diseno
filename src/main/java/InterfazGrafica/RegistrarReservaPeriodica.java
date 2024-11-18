@@ -45,7 +45,8 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         docente = new javax.swing.JComboBox<>();
         catedra = new javax.swing.JComboBox<>();
         cantAlumnos = new javax.swing.JTextField();
-        confirmar = new javax.swing.JButton();
+        buscarAula = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
         cancelar = new javax.swing.JButton();
         confirmar1 = new javax.swing.JButton();
 
@@ -345,18 +346,23 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         });
         jPanel2.add(cantAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 205, 130, 30));
 
-        confirmar.setBackground(new java.awt.Color(242, 240, 235));
-        confirmar.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        confirmar.setForeground(new java.awt.Color(0, 0, 0));
-        confirmar.setText("BUSCAR AULA");
-        confirmar.setAlignmentY(0.0F);
-        confirmar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        confirmar.addActionListener(new java.awt.event.ActionListener() {
+        buscarAula.setBackground(new java.awt.Color(242, 240, 235));
+        buscarAula.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        buscarAula.setForeground(new java.awt.Color(0, 0, 0));
+        buscarAula.setText("BUSCAR AULA");
+        buscarAula.setAlignmentY(0.0F);
+        buscarAula.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        buscarAula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmarActionPerformed(evt);
+                buscarAulaActionPerformed(evt);
             }
         });
-        jPanel2.add(confirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 480, 140, 30));
+        jPanel2.add(buscarAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 480, 140, 30));
+
+        jPanel4.setBackground(new java.awt.Color(242, 240, 235));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 530, 120));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 810, 520));
 
@@ -400,9 +406,18 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_confirmarActionPerformed
+    private void buscarAulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarAulaActionPerformed
+        ProgresoPopup popup = new ProgresoPopup(this);
+        popup.iniciarSimulacion(); 
+        popup.setVisible(true); 
+        
+        AulasDisponibles aDisponibles = new AulasDisponibles();
+        aDisponibles.setRegistrarReservaPeriodica(this);
+        aDisponibles.setVisible(true);
+        aDisponibles.setLocationRelativeTo(null);
+        aDisponibles.setResizable(false);
+        this.setVisible(false);
+    }//GEN-LAST:event_buscarAulaActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         mBedel.setVisible(true);
@@ -505,10 +520,10 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buscarAula;
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField cantAlumnos;
     private javax.swing.JComboBox<String> catedra;
-    private javax.swing.JButton confirmar;
     private javax.swing.JButton confirmar1;
     private javax.swing.JComboBox<String> docente;
     private javax.swing.JTextField duracion;
@@ -528,6 +543,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jueves;
     private javax.swing.JRadioButton lunes;
     private javax.swing.JRadioButton martes1;

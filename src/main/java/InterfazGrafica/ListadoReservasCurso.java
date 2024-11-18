@@ -171,7 +171,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     public void setMenuBedel(MenuBedel mBedel){
+    public void setMenuBedel(MenuBedel mBedel){
         this.mBedel = mBedel;
     }
     
@@ -199,7 +199,12 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void imprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imprimirActionPerformed
-        // TODO add your handling code here:
+        Impresora imprimir = new Impresora();
+        imprimir.setListadoReservasCurso(this);
+        imprimir.setVisible(true);
+        imprimir.setLocationRelativeTo(null);
+        imprimir.setResizable(false);
+        this.setVisible(false);
     }//GEN-LAST:event_imprimirActionPerformed
 
  

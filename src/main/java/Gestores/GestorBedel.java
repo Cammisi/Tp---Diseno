@@ -4,6 +4,8 @@ package Gestores;
 
 import Clases.Bedel;
 import DaosImplementacion.BedelDaoImp;
+import Dtos.BedelDTO;
+import InterfazGrafica.BuscarBedel;
 import static java.lang.Character.isDigit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class GestorBedel {
@@ -142,6 +146,33 @@ public class GestorBedel {
         }
         return flag;
     }
+    
+    public ArrayList<BedelDTO> transformarABedelDTO(ArrayList<Bedel> listaBedeles) {
+        ArrayList<BedelDTO> listaDTO = new ArrayList<>();
+
+        for (Bedel bedel : listaBedeles) {
+            BedelDTO dto = new BedelDTO(
+                bedel.getNombre(),
+                bedel.getApellido(),
+                bedel.getTurno(),
+                bedel.getNombreUsuario()
+            );
+            listaDTO.add(dto);
+        }
+
+        return listaDTO;
+    }
+    
+    public ArrayList<BedelDTO> buscarBedeles(String apellido,String turno) throws SQLException, ClassNotFoundException{
+        ArrayList<Bedel> bedeles = new ArrayList<>();
+        ArrayList<BedelDTO> listaDTO = new ArrayList<>();
+        BedelDaoImp bdao = new BedelDaoImp();
+       
+        bedeles = bdao.buscarBedel(apellido,turno);
+        listaDTO = transformarABedelDTO(bedeles);
+        return listaDTO;
+    }
+    
     
     public boolean validarUsuario(String nombreUsuario) throws SQLException, ClassNotFoundException{
         boolean distintos=true;
