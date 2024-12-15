@@ -65,7 +65,7 @@ public class ProgresoPopup extends JDialog {
         new Thread(() -> {
             for (int i = 0; i <= 100; i++) {
                 try {
-                    Thread.sleep(50); // Simula el tiempo de progreso
+                    Thread.sleep(20); // Simula el tiempo de progreso
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

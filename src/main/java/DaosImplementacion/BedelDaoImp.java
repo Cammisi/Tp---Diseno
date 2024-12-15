@@ -6,11 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class BedelDaoImp implements BedelDAO{
     private static Connection con;
@@ -19,172 +15,250 @@ public class BedelDaoImp implements BedelDAO{
     private static final String USER = "postgres";
     private static final String PASSWORD = "pepe123";
     
-    public void registrarBedel(Bedel b){
+    public void registrarBedel(Bedel b)throws SQLException, ClassNotFoundException{
+        Connection connection = getConnection();
         try {
-            Connection connection = getConnection();
-            try {
+            connection.setAutoCommit(false); 
+            String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
 
-                //Statement stmt = connection.createStatement();
-                connection.setAutoCommit(false); //comienza la transacción.
-                String sqlUsuario = "INSERT INTO public.usuario (nombreusuario, contrasena, apellido, nombre) VALUES (?, ?, ?, ?)";
-                
-                try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
-                    pstmtUser.setString(1, b.getNombreUsuario());
-                    pstmtUser.setString(2, b.getContrasenia());
-                    pstmtUser.setString(3, b.getApellido());
-                    pstmtUser.setString(4, b.getNombre());
-                    pstmtUser.executeUpdate();
-                }
-                
-                String sqlBedel = "INSERT INTO public.bedel (nombreusuario,  eliminado,turno) VALUES (?, ?, ?)";
-                try(PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
-                    pstmtBedel.setString(1, b.getNombreUsuario());
-                    pstmtBedel.setBoolean(2, b.isEliminado());
-                    pstmtBedel.setString(3, b.getTurno());
-                    pstmtBedel.executeUpdate();
-                }
-                
-                
-                connection.commit();
-                System.out.println("Usuario y Bedel registrados exitosamente.");
-                /*
-                } catch (SQLException ex) {
-                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
-            } catch (SQLException ex) {
-                Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error en la transacción, se revertirán los cambios.", ex);
-                try {
-                    // Revertir la transacción en caso de error
-                    if(connection != null) {
-                        connection.rollback();
-                        System.out.println("Transacción revertida.");
-                    }
-                } catch (SQLException rollbackEx) {
-                    Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error al intentar hacer rollback.", rollbackEx);
-                }
-            } finally {
-                // Cerrar la conexión y restaurar el auto-commit
-                if (connection != null) {
-                    try {
-                        connection.setAutoCommit(true); // Restaurar auto-commit
-                        connection.close(); // Cerrar conexión
-                        System.out.println("Se cerró la conexion con la bdd");
-                    } catch (SQLException e) {
-                        Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, "Error al cerrar la conexión.", e);
-                    }
-                }
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)) {
+                pstmtUser.setString(1, b.getNombreUsuario());
+                pstmtUser.setString(2, b.getContrasenia());
+                pstmtUser.setString(3, b.getApellido());
+                pstmtUser.setString(4, b.getNombre());
+                pstmtUser.executeUpdate();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BedelDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+
+            String sqlBedel = "INSERT INTO public.bedel (nombreusuario,turno,eliminado) VALUES (?, ?, ?)";
+            try(PreparedStatement pstmtBedel = connection.prepareStatement(sqlBedel)) {
+                pstmtBedel.setString(1, b.getNombreUsuario());
+                pstmtBedel.setString(2, b.getTurno());
+                pstmtBedel.setBoolean(3, b.isEliminado());
+                pstmtBedel.executeUpdate();
+            }
+            connection.commit();    
+        }catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw ex;
+        }finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
         }
     }
     
     public ArrayList<Bedel> buscarBedel(String apellido,String turno) throws SQLException, ClassNotFoundException{
         ArrayList<Bedel> bedeles = new ArrayList<>();
-         Connection connection = getConnection();
-        if((apellido.equals("Escribe aquí...") && turno.equals("Seleccionar")) || ((apellido.equals("") && turno.equals("Seleccionar")))){
-           
-            String sqlUsuario = "SELECT us.apellido,us.nombre,b.turno,b.nombreusuario "
-                    + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
-                    + "WHERE b.eliminado = false";
-            PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
-            ResultSet rs = pstmtUser.executeQuery();
-            
-            while(rs.next()){
-                String apellido1 = rs.getString("apellido");
-                String nombre = rs.getString("nombre");
-                String turno1 = rs.getString("turno");
-                String nombreUsuario = rs.getString("nombreusuario");
+        Connection connection = getConnection();
+        try{
+            connection.setAutoCommit(false);
+            //si no selecciona nada
+            if((apellido.equals("Escribe aquí...") && turno.equals("Seleccionar")) || ((apellido.equals("") && turno.equals("Seleccionar")))){
 
-                // Crea un objeto Bedel con los datos obtenidos
-                Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+                String sqlUsuario = "SELECT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario) "
+                        + "WHERE b.eliminado = false";
+                try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                    ResultSet rs = pstmtUser.executeQuery();
 
-                // Agrega el objeto a la lista
-                bedeles.add(bedel);
+                    while(rs.next()){
+                        String apellido1 = rs.getString("apellido");
+                        String nombre = rs.getString("nombre");
+                        String turno1 = rs.getString("turno");
+                        String nombreUsuario = rs.getString("nombreusuario");
+
+                        
+                        Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                        
+                        bedeles.add(bedel);
+                    }
+                }
+            //selecciona turno pero no apellido
+            }else{    
+                if(apellido.equals("Escribe aquí...") || apellido.equals("")){
+                    //Connection connection = getConnection();
+                    String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                            + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                            + "WHERE (b.eliminado = false) and b.turno = ?";
+                    try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                        pstmtUser.setString(1, turno);
+                        ResultSet rs = pstmtUser.executeQuery();
+
+                        while(rs.next()){
+                            String apellido1 = rs.getString("apellido");
+                            String nombre = rs.getString("nombre");
+                            String turno1 = rs.getString("turno");
+                            String nombreUsuario = rs.getString("nombreusuario");
+
+                            
+                            Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                            
+                            bedeles.add(bedel);
+                        } 
+                    }
+                    //selecciona apellido pero no turno
+                }else if(turno.equals("Seleccionar")){
+                    String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                            + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                            + "WHERE (b.eliminado = false) and us.apellido= ?";
+                    try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                        pstmtUser.setString(1, apellido);
+                        ResultSet rs = pstmtUser.executeQuery();
+
+                        while(rs.next()){
+                            String apellido1 = rs.getString("apellido");
+                            String nombre = rs.getString("nombre");
+                            String turno1 = rs.getString("turno");
+                            String nombreUsuario = rs.getString("nombreusuario");
+
+                            // Crea un objeto Bedel con los datos obtenidos
+                            Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
+
+                            // Agrega el objeto a la lista
+                            bedeles.add(bedel);
+                        }
+                    }
+                    //llenó ambos campos
+                }else{
+                    String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
+                            + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
+                            + "WHERE (b.eliminado = false) and ((us.apellido = ?) and (b.turno = ?))";
+                    try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                        pstmtUser.setString(1, apellido);
+                        pstmtUser.setString(2, turno);
+                        ResultSet rs = pstmtUser.executeQuery();
+
+                        while(rs.next()){
+                            String apellido1 = rs.getString("apellido");
+                            String nombre = rs.getString("nombre");
+                            String turno1 = rs.getString("turno");
+                            String nombreUsuario = rs.getString("nombreusuario");
+
+                            Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1); 
+                            bedeles.add(bedel);
+                        }
+                    }
+                }
             }
-            
-        }else{    
-            if(apellido.equals("Escribe aquí...") || apellido.equals("")){
-                //Connection connection = getConnection();
-                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
-                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
-                        + "WHERE (b.eliminado = false) and b.turno = ?";
-                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
-                pstmtUser.setString(1, turno);
-                ResultSet rs = pstmtUser.executeQuery();
-
-                while(rs.next()){
-                    String apellido1 = rs.getString("apellido");
-                    String nombre = rs.getString("nombre");
-                    String turno1 = rs.getString("turno");
-                    String nombreUsuario = rs.getString("nombreusuario");
-
-                    // Crea un objeto Bedel con los datos obtenidos
-                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
-
-                    // Agrega el objeto a la lista
-                    bedeles.add(bedel);
-                }  
-            }else if(turno.equals("Seleccionar")){
-               
-                //Connection connection = getConnection();
-                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
-                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
-                        + "WHERE (b.eliminado = false) and us.apellido= ?";
-                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
-                pstmtUser.setString(1, apellido);
-                ResultSet rs = pstmtUser.executeQuery();
-
-                while(rs.next()){
-                    String apellido1 = rs.getString("apellido");
-                    String nombre = rs.getString("nombre");
-                    String turno1 = rs.getString("turno");
-                    String nombreUsuario = rs.getString("nombreusuario");
-
-                    // Crea un objeto Bedel con los datos obtenidos
-                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
-
-                    // Agrega el objeto a la lista
-                    bedeles.add(bedel);
-                }
-                
-            }else{
-                //Connection connection = getConnection();
-                String sqlUsuario = "SELECT DISTINCT us.apellido,us.nombre,b.turno,b.nombreusuario "
-                        + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario)"
-                        + "WHERE (b.eliminado = false) and ((us.apellido = ?) and (b.turno = ?))";
-                PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
-                pstmtUser.setString(1, apellido);
-                pstmtUser.setString(2, turno);
-                ResultSet rs = pstmtUser.executeQuery();
-
-                while(rs.next()){
-                    String apellido1 = rs.getString("apellido");
-                    String nombre = rs.getString("nombre");
-                    String turno1 = rs.getString("turno");
-                    String nombreUsuario = rs.getString("nombreusuario");
-
-                    // Crea un objeto Bedel con los datos obtenidos
-                    Bedel bedel = new Bedel( nombre, apellido1, nombreUsuario, turno1);
-
-                    // Agrega el objeto a la lista
-                    bedeles.add(bedel);
-                }
+            connection.commit();
+        }catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
             }
         }
-        connection.close();
         return bedeles;
     }
     
-    public void modificarBedel(){
+    public Bedel buscarBedel(String nombreUsuario) throws SQLException, ClassNotFoundException{
+        Connection connection = getConnection();
         
+        try{
+            String sqlUsuario = "SELECT * "
+                    + "FROM public.bedel b JOIN public.usuario us ON(b.nombreusuario=us.nombreusuario) "
+                    + "WHERE b.nombreusuario = ?";
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                pstmtUser.setString(1, nombreUsuario);
+                ResultSet rs = pstmtUser.executeQuery();
+                if(rs.next()){
+                    String apellido1 = rs.getString("apellido");
+                    String nombre = rs.getString("nombre");
+                    String turno1 = rs.getString("turno");
+                    String nombreUsuario1 = rs.getString("nombreusuario");
+                    Boolean eliminado = rs.getBoolean("eliminado");
+                    String contrasena = rs.getString("contrasena");
+                    Bedel bedel = new Bedel(turno1,eliminado,nombre,apellido1,nombreUsuario1,contrasena);
+                    connection.close();
+                    return bedel;
+                }
+            }
+            
+        }catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            connection.close();
+        }
+        return null;
     }
-    public void eliminarBedel(){
-        
+    
+    public void eliminarBedel(Bedel bedel)throws SQLException, ClassNotFoundException{
+        Connection connection= getConnection();
+        String usuario = bedel.getNombreUsuario();
+        try { 
+            connection.setAutoCommit(false);
+            String sqlUsuario = "UPDATE public.bedel "
+                + "SET eliminado = true "
+                + "WHERE nombreusuario = ?";
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                pstmtUser.setString(1, usuario);
+                pstmtUser.executeUpdate();
+            }
+            connection.commit();
+        } catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+    }
+    
+    @Override
+    public void modificarBedel(Bedel bedel) throws SQLException,ClassNotFoundException{
+        Connection connection = getConnection();
+        try {
+            connection.setAutoCommit(false); //comienza la transacción.
+            String sqlUsuario = "UPDATE public.usuario "
+                + "SET nombre = ?, apellido = ?, contrasena = ? "
+                + "WHERE nombreusuario = ?";
+
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){        
+            pstmtUser.setString(1, bedel.getNombre());
+            pstmtUser.setString(2, bedel.getApellido());
+            pstmtUser.setString(3, bedel.getContrasenia());
+            pstmtUser.setString(4, bedel.getNombreUsuario());
+            pstmtUser.executeUpdate();
+            }
+
+            String sqlUsuario2 = "UPDATE public.bedel "
+                + "SET turno = ? "
+                + "WHERE nombreusuario = ? ";
+
+            try(PreparedStatement pstmtUser2 = connection.prepareStatement(sqlUsuario2)){           
+            pstmtUser2.setString(1,  bedel.getTurno());
+            pstmtUser2.setString(2, bedel.getNombreUsuario());
+            pstmtUser2.executeUpdate();
+            }
+            connection.commit();
+            System.out.println("Usuario y bedel modificados.");
+        } catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
     }
     
    

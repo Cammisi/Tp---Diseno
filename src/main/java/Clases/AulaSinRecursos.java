@@ -5,7 +5,12 @@ public class AulaSinRecursos extends Aula{
     private String tipoDePizarron;
     private boolean aireAcondicionado;
     private boolean ventiladores;
+    
 
+    public AulaSinRecursos(){
+        
+    }
+    
     public AulaSinRecursos(String tipoDePizarron, boolean aireAcondicionado, boolean ventiladores, int capacidad, int numero, int piso, boolean disponible) {
         super(capacidad, numero, piso, disponible);
         this.tipoDePizarron = tipoDePizarron;
@@ -13,10 +18,13 @@ public class AulaSinRecursos extends Aula{
         this.ventiladores = ventiladores;
     }
 
+    
+    
+    
     public String getTipoDePizarron() {
         return tipoDePizarron;
     }
-
+    
     public void setTipoDePizarron(String tipoDePizarron) {
         this.tipoDePizarron = tipoDePizarron;
     }

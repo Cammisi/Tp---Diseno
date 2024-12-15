@@ -5,22 +5,17 @@ package Gestores;
 import Clases.Bedel;
 import DaosImplementacion.BedelDaoImp;
 import Dtos.BedelDTO;
-import InterfazGrafica.BuscarBedel;
-import static java.lang.Character.isDigit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class GestorBedel {
     
     public boolean crearBedel(String nombre,String apellido,String turno, String nombreUsuario,String contraseña,String confirmarContraseña) throws SQLException, ClassNotFoundException{
-        
+        //boolean flagEliminado=false;
         boolean flag=true;
         int i=0;
         ArrayList<String> datos = new ArrayList();
@@ -48,12 +43,17 @@ public class GestorBedel {
         }
 
         if(flag){flag=validarUsuario(nombreUsuario);}
+        //if(flag){flagEliminado=validarEliminado(nombreUsuario);}
         
-        if(flag){
+        BedelDaoImp bdao = new BedelDaoImp(); 
+        if(flag /*&& !flagEliminado*/){
             Bedel b = new Bedel(turno,false,nombre,apellido,nombreUsuario,contraseña);
-            BedelDaoImp bdao = new BedelDaoImp();         
             bdao.registrarBedel(b);
-        }
+        }/*else if(flag && flagEliminado){
+            Bedel b = new Bedel(turno,false,nombre,apellido,nombreUsuario,contraseña);
+            bdao.modificarBedel(b);
+        }*/
+      
         return flag;
     }
     
@@ -178,17 +178,130 @@ public class GestorBedel {
         boolean distintos=true;
         BedelDaoImp bdao = new BedelDaoImp(); 
         Connection connection = bdao.getConnection();
-        String sqlUsuario = "SELECT nombreusuario FROM public.bedel WHERE nombreusuario=?";
-        PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
-        pstmtUser.setString(1, nombreUsuario);
-        ResultSet rs = pstmtUser.executeQuery();
-        if(rs.next()){
-            distintos=false;
+        try{
+            connection.setAutoCommit(false);
+            String sqlUsuario = "SELECT nombreusuario FROM public.bedel WHERE nombreusuario=?";
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                pstmtUser.setString(1, nombreUsuario);
+                ResultSet rs = pstmtUser.executeQuery();
+                
+                if(rs.next()){
+                    distintos=false;
+                }
+                connection.commit();
+            }
+        }catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
         }
-        
-        connection.close(); 
+            
         return distintos;
     }
     
+    public boolean validarEliminado(String nombreUsuario) throws SQLException, ClassNotFoundException{
+        boolean eliminado=true;
+        BedelDaoImp bdao = new BedelDaoImp(); 
+        Connection connection = bdao.getConnection();
+        try{
+            connection.setAutoCommit(false);
+            String sqlUsuario = "SELECT eliminado FROM public.bedel WHERE nombreusuario=?";
+            try(PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario)){
+                pstmtUser.setString(1, nombreUsuario);
+                ResultSet rs = pstmtUser.executeQuery();
+                
+                if(rs.next()){
+                    if(!rs.getBoolean("eliminado")){
+                        eliminado=false;
+                    }  
+                }else{
+                    eliminado=false;
+                }
+                
+                connection.commit();
+            }
+        }catch(SQLException ex){
+            if (connection != null) {
+                connection.rollback(); // Revertir transacción en caso de error.
+            }
+            throw ex;
+        }finally{
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+            
+        return eliminado;
+    }
+    
+    
+    public void eliminarBedel(BedelDTO unBedel) throws SQLException, ClassNotFoundException{
+        BedelDaoImp bdao = new BedelDaoImp(); 
+        Bedel bedel = bdao.buscarBedel(unBedel.getNombreUsuario());
+        bedel.setEliminado(true);
+        bdao.eliminarBedel(bedel);
+    }
+    
+    public String recuperarContrasena(String nombreUsuario) throws SQLException, ClassNotFoundException{
+        String clave = "";
+        
+        BedelDaoImp bdao = new BedelDaoImp(); 
+        Connection connection = bdao.getConnection();
+        String sqlUsuario = "SELECT contrasena FROM public.usuario WHERE nombreusuario=?";
+        PreparedStatement pstmtUser = connection.prepareStatement(sqlUsuario);
+        pstmtUser.setString(1, nombreUsuario);
+        ResultSet rs = pstmtUser.executeQuery();
+        
+        if(rs.next()){
+            clave = rs.getString("contrasena");;
+        }
+        connection.close();
+        return clave; 
+    }
+    
+    public boolean modificarBedel(String nombre,String  apellido,String turno,String nombreUsuario,String  contraseña,String confirmarContraseña) throws SQLException, ClassNotFoundException{
+        boolean flag=true;
+        int i=0;
+        ArrayList<String> datos = new ArrayList();
+        datos.add(apellido);
+        datos.add(nombre);
+        datos.add(turno);
+        datos.add(contraseña);
+        datos.add(confirmarContraseña);
+       
+        while(i<5 && flag){
+            flag=validarVacio(datos.get(i));          
+            if((i==0 && flag) || (i==1 && flag)){
+                flag=validarLongitud(datos.get(i),i);
+                if(flag){flag=validarNotDigit(datos.get(i));}
+            }
+            if(i==3 && flag){
+                flag=validarContrasena(datos.get(i));
+                if(flag){flag=validarConfirmarContrasena(datos.get(i),datos.get(i+1));}
+            }
+            i++;
+        }
 
+        if(flag){
+            
+            BedelDaoImp bdao = new BedelDaoImp();         
+            Bedel bedel = bdao.buscarBedel(nombreUsuario);
+            bedel.setEliminado(false);
+            bedel.setApellido(apellido);
+            bedel.setNombre(nombre);
+            bedel.setContrasenia(contraseña);
+            bedel.setTurno(turno);
+            
+            bdao.modificarBedel(bedel);
+        }
+        return flag;
+    }
 }
+

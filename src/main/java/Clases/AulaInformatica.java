@@ -6,7 +6,12 @@ public class AulaInformatica extends Aula{
     private String tipoDePizarron;
     private boolean canon;
     private boolean aireAcondicionado;
+    
 
+    public AulaInformatica(){
+        
+    }
+    
     public AulaInformatica(int cantidadDePcs, String tipoDePizarron, boolean canon, boolean aireAcondicionado, int capacidad, int numero, int piso, boolean disponible) {
         super(capacidad, numero, piso, disponible);
         this.cantidadDePcs = cantidadDePcs;
@@ -14,6 +19,7 @@ public class AulaInformatica extends Aula{
         this.canon = canon;
         this.aireAcondicionado = aireAcondicionado;
     }
+
 
     public int getCantidadDePcs() {
         return cantidadDePcs;

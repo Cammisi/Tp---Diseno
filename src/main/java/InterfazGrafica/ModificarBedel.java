@@ -15,10 +15,37 @@ import javax.swing.UIManager;
 
 public class ModificarBedel extends javax.swing.JFrame {
 
-    private BuscarBedel bBedel;
+    private MenuAdministrador mAdm;
+    private GestorBedel gBedel;
+    
     
     public ModificarBedel() {
         initComponents();
+    }
+    
+    public ModificarBedel(String[] datosBedel,MenuAdministrador mAdm1){
+        initComponents();
+        
+        mAdm = mAdm1;
+        gBedel = new GestorBedel();
+        String clave;
+        
+        try { 
+            clave = gBedel.recuperarContrasena(datosBedel[3]);
+            
+            apellido.setText(datosBedel[0]);
+            nombre1.setText(datosBedel[1]);
+            turno.setSelectedItem((String) datosBedel[2]);
+            contraseña.setText(clave);
+            usuario.setText(datosBedel[3]); 
+            confirmarContraseña.setText(clave);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ModificarBedel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ModificarBedel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -363,10 +390,6 @@ public class ModificarBedel extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void setBuscarBedel(BuscarBedel bBedel){
-        this.bBedel = bBedel;
-    }
-    
     private void turnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_turnoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_turnoActionPerformed
@@ -386,11 +409,27 @@ public class ModificarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_apellidoKeyPressed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        bBedel.setVisible(true);
-        this.setVisible(false);
+        if(mensajeAdvertencia()==1){
+            BuscarBedel bBedel = new BuscarBedel();
+            bBedel.setMenuAdministrador(mAdm);
+            bBedel.setVisible(true);
+            bBedel.setLocationRelativeTo(null);
+            bBedel.setResizable(false);
+            this.setVisible(false);
+        }
+       
         
     }//GEN-LAST:event_cancelarActionPerformed
 
+    public int mensajeAdvertencia(){
+        Object[] opciones = {"NO","SI"};
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        int seleccion = JOptionPane.showOptionDialog(null, "QUIERES DEJAR DE MODIFICAR ESTE BEDEL?","ADVERTENCIA",JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE, getIcon("/warning.png",32,32),opciones,opciones[1]);
+        return seleccion;
+    }
+    
     private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
 
         this.limpiarLabels();
@@ -489,22 +528,24 @@ public class ModificarBedel extends javax.swing.JFrame {
 
         if(validarDatos){
             String turnoS=(String)turno.getSelectedItem();
-            try {
-                validarGeneral=gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText(),confirmarContraseña.getText());
-            } catch (SQLException ex) {
-                Logger.getLogger(RegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(RegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            if(validarGeneral){
+            
+            try{
+                validarGeneral=gestorBedel.modificarBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText(),confirmarContraseña.getText());
+                if(validarGeneral){
                 mensajeExito();
-                limpiarDatosBedel();
                 limpiarLabels();
-            }else{
-                mensajeFracaso();
+                cancelarActionPerformed(evt);
+                }else{
+                    mensajeFracaso();
+                }
+            }catch (SQLException ex) {
+                mensajeFracasoBd();
+            } catch (ClassNotFoundException ex) {
+                mensajeFracasoBd();
             }
+            
         }
+        
     }//GEN-LAST:event_confirmarActionPerformed
 
     private void infoContraseñaMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoContraseñaMouseMoved
@@ -560,6 +601,14 @@ public class ModificarBedel extends javax.swing.JFrame {
         //UIManager.put("Panel.background", new Color(242,240,235));
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
         JOptionPane.showMessageDialog(null, "NO SE PUDO MODIFICAR EL BEDEL.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeFracasoBd(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "LO SENTIMOS, HUBO UN ERROR EN LA BASE DE DATOS Y NO SE PUDO MODIFICAR EL BEDEL.","¡ALGO SALIO MAL!",
                 JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
     }
     

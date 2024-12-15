@@ -8,7 +8,12 @@ public class AulaMultimedios extends Aula{
     private String tipoDePizarron;
     private boolean aireAcondicionado;
     private boolean ventiladores;
-
+    
+    
+    public AulaMultimedios(){
+        
+    }
+    
     public AulaMultimedios(boolean televisor, boolean canon, boolean computadora, String tipoDePizarron, boolean aireAcondicionado, boolean ventiladores, int capacidad, int numero, int piso, boolean disponible) {
         super(capacidad, numero, piso, disponible);
         this.televisor = televisor;
@@ -19,6 +24,7 @@ public class AulaMultimedios extends Aula{
         this.ventiladores = ventiladores;
     }
 
+   
     public boolean isTelevisor() {
         return televisor;
     }

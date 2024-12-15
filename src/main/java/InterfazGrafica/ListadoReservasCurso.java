@@ -1,11 +1,29 @@
 
 package InterfazGrafica;
 
+import Dtos.ListaReservaDTO;
+import Gestores.GestorReserva;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+
 public class ListadoReservasCurso extends javax.swing.JFrame {
 
     private MenuBedel mBedel;
+    private GestorReserva gReserva;
+    
     public ListadoReservasCurso() {
         initComponents();
+        centrarColumnas();
+        gReserva = new GestorReserva();
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setRowSelectionAllowed(true); 
+        jTable1.setColumnSelectionAllowed(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -19,7 +37,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         añoLectivo = new javax.swing.JTextField();
         catedra = new javax.swing.JComboBox<>();
-        modificar = new javax.swing.JButton();
+        buscarReserva = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -27,6 +45,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         imprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("MENU BEDEL | LISTADO DE RESERVAS POR CURSO");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -38,7 +57,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("AÑO: (*)");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 70, -1, 30));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, -1, 30));
 
         jLabel7.setBackground(new java.awt.Color(242, 240, 235));
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -50,7 +69,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("CATEDRA: (*)");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 40, -1, -1));
 
         añoLectivo.setBackground(new java.awt.Color(242, 240, 235));
         añoLectivo.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -68,32 +87,32 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
                 añoLectivoKeyPressed(evt);
             }
         });
-        jPanel2.add(añoLectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(595, 65, 150, 30));
+        jPanel2.add(añoLectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 35, 150, 30));
 
         catedra.setBackground(new java.awt.Color(242, 240, 235));
         catedra.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         catedra.setForeground(new java.awt.Color(153, 153, 153));
-        catedra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", " " }));
+        catedra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "matemtica", "fisica", "quimica", " " }));
         catedra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         catedra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 catedraActionPerformed(evt);
             }
         });
-        jPanel2.add(catedra, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 65, 150, 30));
+        jPanel2.add(catedra, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 35, 150, 30));
 
-        modificar.setBackground(new java.awt.Color(242, 240, 235));
-        modificar.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        modificar.setForeground(new java.awt.Color(0, 0, 0));
-        modificar.setText("BUSCAR RESERVA");
-        modificar.setAlignmentY(0.0F);
-        modificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        modificar.addActionListener(new java.awt.event.ActionListener() {
+        buscarReserva.setBackground(new java.awt.Color(242, 240, 235));
+        buscarReserva.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        buscarReserva.setForeground(new java.awt.Color(0, 0, 0));
+        buscarReserva.setText("BUSCAR RESERVA");
+        buscarReserva.setAlignmentY(0.0F);
+        buscarReserva.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        buscarReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modificarActionPerformed(evt);
+                buscarReservaActionPerformed(evt);
             }
         });
-        jPanel2.add(modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 170, 30));
+        jPanel2.add(buscarReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 170, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, -20, 960, 150));
 
@@ -101,7 +120,7 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable1.setBackground(new java.awt.Color(242, 240, 235));
-        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,9 +129,19 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
             new String [] {
                 "DIA", "HORA DE INICIO", "DURACION", "AULA"
             }
-        ));
-        jTable1.setCellSelectionEnabled(true);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setFocusable(false);
         jTable1.setGridColor(new java.awt.Color(153, 153, 153));
+        jTable1.setRowHeight(30);
+        jTable1.setRowSelectionAllowed(true);
         jTable1.setSelectionBackground(new java.awt.Color(242, 240, 235));
         jTable1.setSelectionForeground(new java.awt.Color(153, 153, 153));
         jScrollPane1.setViewportView(jTable1);
@@ -189,9 +218,20 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_catedraActionPerformed
 
-    private void modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarActionPerformed
-       
-    }//GEN-LAST:event_modificarActionPerformed
+    private void buscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarReservaActionPerformed
+        String ano = añoLectivo.getText();
+        String materia = (String) catedra.getSelectedItem();
+        if( ano.equals("Escribe aquí...") || materia.equals("Seleccionar") ){
+            mensajeSeleccionar();
+        }else{
+            ArrayList<ListaReservaDTO> reservas = gReserva.buscarReservaCurso(ano,materia);
+            if(reservas.isEmpty()){
+                mensajeFracaso();
+            }else{
+                cargarDatos(reservas);
+            }
+        }
+    }//GEN-LAST:event_buscarReservaActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         mBedel.setVisible(true);
@@ -206,11 +246,55 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
         imprimir.setResizable(false);
         this.setVisible(false);
     }//GEN-LAST:event_imprimirActionPerformed
-
+    
+    public void mensajeSeleccionar(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "SE DEBEN INDICAR LOS CRITERIOS DE BUSQUEDA.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
  
+    public void mensajeFracaso(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "ESTA CATEDRA NO RESERVO AULAS EN EL AÑO SELECCIONADO.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    private void centrarColumnas() {
+        // Crear un renderizador para centrar el texto
+        javax.swing.table.DefaultTableCellRenderer renderer = new javax.swing.table.DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        // Aplicar el renderizador a cada columna de la tabla
+        for (int i = 0; i < jTable1.getColumnCount(); i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+    }
+
+    private void cargarDatos(ArrayList<ListaReservaDTO> reservas) {
+        // Obtén el modelo de la tabla
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        // Limpia las filas existentes en la tabla
+        model.setRowCount(0);
+
+        // Agrega cada BedelDTO como una fila en la tabla
+        for (ListaReservaDTO reserva : reservas) {
+            model.addRow(new Object[]{
+                reserva.getDia(), 
+                reserva.getHoraInicio(), 
+                reserva.getDuracion(), 
+                reserva.getNumeroAula()
+            });
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField añoLectivo;
+    private javax.swing.JButton buscarReserva;
     private javax.swing.JButton cancelar;
     private javax.swing.JComboBox<String> catedra;
     private javax.swing.JButton imprimir;
@@ -222,6 +306,10 @@ public class ListadoReservasCurso extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JButton modificar;
     // End of variables declaration//GEN-END:variables
+
+    private Icon getIcon(String ruta, int w, int h) {
+        return new ImageIcon(new ImageIcon(getClass().getResource(ruta))
+                .getImage().getScaledInstance(w, h, 0));
+    }
 }

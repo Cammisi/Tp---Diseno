@@ -1,24 +1,40 @@
 
 package InterfazGrafica;
 
+import Dtos.BedelDTO;
+import Gestores.GestorBedel;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class EliminarBedel extends javax.swing.JFrame {
-    private BuscarBedel bedel;
+    
+    private MenuAdministrador mAdm;
+    private GestorBedel gBedel;
+    private String[] datosBedel1 = new String[4];
     
     public EliminarBedel() {
         initComponents();
+        
+        gBedel = new GestorBedel();
     }
     
-    public void setBuscarBedel(BuscarBedel bedel){
-        this.bedel = bedel;
+    public EliminarBedel(String[] datosBedel,MenuAdministrador mAdm1){
+        initComponents();
+        
+        mAdm = mAdm1;
+        gBedel = new GestorBedel();
+        
+        datosBedel1=datosBedel;
+        apellido.setText(datosBedel[0]);
+        nombre.setText(datosBedel[1]);
+        turno.setText(datosBedel[2]);
     }
-
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -152,20 +168,53 @@ public class EliminarBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_turnoActionPerformed
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
-       mensajeAdvertencia();
+       if(mensajeAdvertencia()==1){
+           BedelDTO bedelBorrar = new BedelDTO(datosBedel1[1],datosBedel1[0],datosBedel1[2],datosBedel1[3]);
+           try{
+                gBedel.eliminarBedel(bedelBorrar);
+                mensajeExito();
+            }catch (SQLException ex) {
+                mensajeFracasoBd();
+            } catch (ClassNotFoundException ex) {
+                mensajeFracasoBd();
+            }
+       }
+       cancelarActionPerformed(evt);
     }//GEN-LAST:event_eliminarActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        bedel.setVisible(true);
+        BuscarBedel bBedel = new BuscarBedel();
+        bBedel.setMenuAdministrador(mAdm);
+        bBedel.setVisible(true);
+        bBedel.setLocationRelativeTo(null);
+        bBedel.setResizable(false);
         this.setVisible(false);
+
     }//GEN-LAST:event_cancelarActionPerformed
 
-    public void mensajeAdvertencia(){
+     public void mensajeExito(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "EL BEDEL SE ELIMINO CORRECTAMENTE.","",
+            JOptionPane.PLAIN_MESSAGE, getIcon("/aceptar.png",32,32));
+    }
+     
+    public void mensajeFracasoBd(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "LO SENTIMOS, HUBO UN ERROR EN LA BASE DE DATOS Y NO SE PUDO ELIMINAR EL BEDEL.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public int mensajeAdvertencia(){
         Object[] opciones = {"NO","SI"};
         UIManager.put("OptionPane.background", new Color(242,240,235));
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
-        JOptionPane.showOptionDialog(null, "ESTAS SEGURO DE ELIMINAR ESTE BEDEL?","ADVERTENCIA",JOptionPane.DEFAULT_OPTION,
+        int seleccion = JOptionPane.showOptionDialog(null, "ESTAS SEGURO DE ELIMINAR ESTE BEDEL?","ADVERTENCIA",JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE, getIcon("/warning.png",32,32),opciones,opciones[1]);
+        return seleccion;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -14,6 +14,10 @@ public abstract class Usuario {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
     }
+
+    public Usuario() {
+    }
+    
     
     public Usuario(String nombre, String apellido, String nombreUsuario){
         this.nombre = nombre;

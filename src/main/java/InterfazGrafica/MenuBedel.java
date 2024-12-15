@@ -1,12 +1,22 @@
 
 package InterfazGrafica;
 
-public class MenuBedel extends javax.swing.JFrame {
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+public class MenuBedel extends javax.swing.JFrame {
+    
+    String usuario;
     public MenuBedel() {
         initComponents();
     }
-
+    
+    public MenuBedel(String usuario) {
+        initComponents();
+        this.usuario=usuario;
+    }
+        
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -111,7 +121,7 @@ public class MenuBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_listadoParaCursoActionPerformed
 
     private void rPeriodicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rPeriodicaActionPerformed
-        RegistrarReservaPeriodica rPeriodica = new RegistrarReservaPeriodica();
+        RegistrarReservaPeriodica rPeriodica = new RegistrarReservaPeriodica(usuario);
         rPeriodica.setMenuBedel(this);
         rPeriodica.setVisible(true);
         rPeriodica.setLocationRelativeTo(null);
@@ -120,7 +130,8 @@ public class MenuBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_rPeriodicaActionPerformed
 
     private void rEsporadicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rEsporadicaActionPerformed
-        RegistrarReservaEsporadica rEsporadica = new RegistrarReservaEsporadica();
+        RegistrarReservaEsporadica rEsporadica;
+        rEsporadica = new RegistrarReservaEsporadica(usuario);
         rEsporadica.setMenuBedel(this);
         rEsporadica.setVisible(true);
         rEsporadica.setLocationRelativeTo(null);
@@ -129,7 +140,12 @@ public class MenuBedel extends javax.swing.JFrame {
     }//GEN-LAST:event_rEsporadicaActionPerformed
 
     private void buscarAulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarAulaActionPerformed
-        // TODO add your handling code here:
+        BuscarAula bAula = new BuscarAula();
+        bAula.setMenuBedel(this);
+        bAula.setVisible(true);
+        bAula.setLocationRelativeTo(null);
+        bAula.setResizable(false);
+        this.setVisible(false);
     }//GEN-LAST:event_buscarAulaActionPerformed
 
     private void listadoParaDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listadoParaDiaActionPerformed

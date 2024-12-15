@@ -12,11 +12,10 @@ public class GestorUsuario {
         boolean encontrado = false;
         if(usuarioDao.esBedel(usuario,contrasena)){
             encontrado=true;
-            MenuBedel mBedel = new MenuBedel();
+            MenuBedel mBedel = new MenuBedel(usuario);
             mBedel.setVisible(true);
             mBedel.setLocationRelativeTo(null);
             mBedel.setResizable(false);
-            System.out.println("es bedel");
         }else{
             if(usuarioDao.esAdministrador(usuario,contrasena)){
                 encontrado=true;
@@ -24,7 +23,6 @@ public class GestorUsuario {
                 mAdministrador.setVisible(true);
                 mAdministrador.setLocationRelativeTo(null);
                 mAdministrador.setResizable(false);
-                System.out.println("es adm");
             }
         }
         

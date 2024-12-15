@@ -1,14 +1,14 @@
 
 package Clases;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.ArrayList;
 
 public abstract class Reserva {
     private int idReserva;
-    private int cantidadAlumnos;
-    private int idActividad;
-    private String nombreActividad;
+    private Bedel bedel;
     private int dniDocente;
+    private ArrayList<Dia> dias;
     private String nombreDocente;
     private String apellidoDocente;
     private String emailDocente;
@@ -18,50 +18,41 @@ public abstract class Reserva {
         
     }
     
-    public Reserva(int idReserva, int cantidadAlumnos, int idActividad, String nombreActividad, int dniDocente, String nombreDocente, String apellidoDocente, String emailDocente, Date fechaCreacion) {
+    public Reserva(int idReserva, int dniDocente, String nombreDocente, String apellidoDocente, String emailDocente, Date fechaCreacion) {
         this.idReserva = idReserva;
-        this.cantidadAlumnos = cantidadAlumnos;
-        this.idActividad = idActividad;
-        this.nombreActividad = nombreActividad;
         this.dniDocente = dniDocente;
         this.nombreDocente = nombreDocente;
         this.apellidoDocente = apellidoDocente;
         this.emailDocente = emailDocente;
         this.fechaCreacion = fechaCreacion;
+        
     }
-
+    
+    public void inicializarDias(){
+        this.dias = new ArrayList<>();
+    }
+    
     public int getIdReserva() {
         return idReserva;
     }
 
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
+
+    public Bedel getBedel() {
+        return bedel;
     }
 
-    public int getCantidadAlumnos() {
-        return cantidadAlumnos;
+    public void setBedel(Bedel bedel) {
+        this.bedel = bedel;
     }
 
-    public void setCantidadAlumnos(int cantidadAlumnos) {
-        this.cantidadAlumnos = cantidadAlumnos;
+    public ArrayList<Dia> getDias() {
+        return dias;
     }
 
-    public int getIdActividad() {
-        return idActividad;
+    public void setDias(ArrayList<Dia> dias) {
+        this.dias = dias;
     }
-
-    public void setIdActividad(int idActividad) {
-        this.idActividad = idActividad;
-    }
-
-    public String getNombreActividad() {
-        return nombreActividad;
-    }
-
-    public void setNombreActividad(String nombreActividad) {
-        this.nombreActividad = nombreActividad;
-    }
-
+    
     public int getDniDocente() {
         return dniDocente;
     }
@@ -74,6 +65,10 @@ public abstract class Reserva {
         return nombreDocente;
     }
 
+    public void setDiaEspecifico(Dia dia){
+        dias.add(dia);
+    }
+    
     public void setNombreDocente(String nombreDocente) {
         this.nombreDocente = nombreDocente;
     }

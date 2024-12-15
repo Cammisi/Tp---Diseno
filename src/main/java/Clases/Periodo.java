@@ -18,6 +18,10 @@ public class Periodo {
         this.anoLectivo = anoLectivo;
     }
 
+    public Periodo() {
+    }
+    
+
     public Date getFechaInicio() {
         return fechaInicio;
     }

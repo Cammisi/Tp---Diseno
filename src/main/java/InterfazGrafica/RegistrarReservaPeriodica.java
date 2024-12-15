@@ -1,12 +1,70 @@
 
 package InterfazGrafica;
 
-public class RegistrarReservaPeriodica extends javax.swing.JFrame {
+import Clases.Aula;
+import Dtos.ReservaPDTO;
+import Gestores.GestorAula;
+import Gestores.GestorExterno;
+import Gestores.GestorReserva;
+import static InterfazGrafica.RegistrarReservaEsporadica.esEmailValido;
+import static InterfazGrafica.RegistrarReservaEsporadica.validarHora;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.TableCellRenderer;
 
+public class RegistrarReservaPeriodica extends javax.swing.JFrame {
+    
     private MenuBedel mBedel;
-   
-    public RegistrarReservaPeriodica() {
+    private GestorExterno gExterno;
+    private GestorAula gAula;
+    private GestorReserva gReserva;
+    private String bedel;
+    private ArrayList<ReservaPDTO> reservasNoConfirmadas = new ArrayList<>();
+    
+    public RegistrarReservaPeriodica(String bedel) {
         initComponents();
+        this.bedel=bedel;
+        gAula = new GestorAula();
+        gExterno = new  GestorExterno();
+        gReserva = new GestorReserva();
+        
+        ArrayList<String> dni = new ArrayList<>();
+        dni = gExterno.obtenerDocentes();
+        
+        for (String i : dni) {
+            docente.addItem(i);
+        }
+        
+        ArrayList<String> catedras = new ArrayList<>();
+        catedras = gExterno.obtenerCatedras();
+        
+        for (String i : catedras) {
+            catedra.addItem(i);
+        }
+        
+        tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabla.setRowSelectionAllowed(true); 
+        tabla.setColumnSelectionAllowed(false);
+        tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.getColumnModel().getColumn(1).setCellRenderer(new RegistrarReservaPeriodica.ActionCellRenderer());
     }
     
     public void setMenuBedel(MenuBedel mBedel){
@@ -35,6 +93,9 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         jueves = new javax.swing.JRadioButton();
         viernes = new javax.swing.JRadioButton();
         indicacionHora = new javax.swing.JButton();
+        vacioHora = new javax.swing.JLabel();
+        vacioDuracion = new javax.swing.JLabel();
+        vacioDia = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -47,6 +108,14 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         cantAlumnos = new javax.swing.JTextField();
         buscarAula = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        vacioAlumnos = new javax.swing.JLabel();
+        vacioDocente = new javax.swing.JLabel();
+        vacioCatedra = new javax.swing.JLabel();
+        vacioAula = new javax.swing.JLabel();
+        vacioEmail = new javax.swing.JLabel();
+        vacioPeriodo = new javax.swing.JLabel();
         cancelar = new javax.swing.JButton();
         confirmar1 = new javax.swing.JButton();
 
@@ -79,13 +148,13 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 emailKeyPressed(evt);
             }
         });
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 265, 130, 30));
+        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 315, 130, 30));
 
         jLabel9.setBackground(new java.awt.Color(242, 240, 235));
         jLabel9.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("NOMBRE DE CATEDRA: (*)");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 150, -1, -1));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 170, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(242, 240, 235));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -94,7 +163,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("DIA QUE SE DICTA (*): ");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(288, 14, 201, -1));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 201, -1));
 
         lunes.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(lunes);
@@ -109,13 +178,13 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 lunesActionPerformed(evt);
             }
         });
-        jPanel3.add(lunes, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 70, 40));
+        jPanel3.add(lunes, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 70, 40));
 
         horarioInicio.setBackground(new java.awt.Color(242, 240, 235));
         horarioInicio.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         horarioInicio.setForeground(new java.awt.Color(0, 0, 0));
         horarioInicio.setText("HORARIO DE INICIO:(*)");
-        jPanel3.add(horarioInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+        jPanel3.add(horarioInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, -1, -1));
 
         horaInicio.setBackground(new java.awt.Color(242, 240, 235));
         horaInicio.setForeground(new java.awt.Color(153, 153, 153));
@@ -132,13 +201,13 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 horaInicioKeyPressed(evt);
             }
         });
-        jPanel3.add(horaInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 100, 80, 20));
+        jPanel3.add(horaInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, 80, 20));
 
         jLabel8.setBackground(new java.awt.Color(242, 240, 235));
         jLabel8.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("DURACION:(*)");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 100, -1, -1));
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 90, -1, -1));
 
         duracion.setBackground(new java.awt.Color(242, 240, 235));
         duracion.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -155,7 +224,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 duracionKeyPressed(evt);
             }
         });
-        jPanel3.add(duracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 100, 130, 20));
+        jPanel3.add(duracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 130, 20));
 
         martes1.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(martes1);
@@ -170,7 +239,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 martes1ActionPerformed(evt);
             }
         });
-        jPanel3.add(martes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, 70, 40));
+        jPanel3.add(martes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 70, 40));
 
         sabado.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(sabado);
@@ -185,7 +254,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 sabadoActionPerformed(evt);
             }
         });
-        jPanel3.add(sabado, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, 70, 40));
+        jPanel3.add(sabado, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 40, 70, 40));
 
         miercoles.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(miercoles);
@@ -200,7 +269,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 miercolesActionPerformed(evt);
             }
         });
-        jPanel3.add(miercoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 40, 100, 40));
+        jPanel3.add(miercoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 100, 40));
 
         jueves.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(jueves);
@@ -215,7 +284,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 juevesActionPerformed(evt);
             }
         });
-        jPanel3.add(jueves, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, 70, 40));
+        jPanel3.add(jueves, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, 70, 40));
 
         viernes.setBackground(new java.awt.Color(242, 240, 235));
         grupoDias.add(viernes);
@@ -230,7 +299,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 viernesActionPerformed(evt);
             }
         });
-        jPanel3.add(viernes, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 70, 40));
+        jPanel3.add(viernes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, 80, 40));
 
         indicacionHora.setBackground(new java.awt.Color(242, 240, 235));
         indicacionHora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/exclamacion (2).png"))); // NOI18N
@@ -246,87 +315,102 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 indicacionHoraActionPerformed(evt);
             }
         });
-        jPanel3.add(indicacionHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 95, 40, 30));
+        jPanel3.add(indicacionHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 85, 40, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 790, 130));
+        vacioHora.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioHora.setForeground(new java.awt.Color(255, 0, 0));
+        vacioHora.setToolTipText("");
+        jPanel3.add(vacioHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, 290, 20));
+
+        vacioDuracion.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioDuracion.setForeground(new java.awt.Color(255, 0, 0));
+        vacioDuracion.setToolTipText("");
+        jPanel3.add(vacioDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 120, 250, 20));
+
+        vacioDia.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioDia.setForeground(new java.awt.Color(255, 0, 0));
+        vacioDia.setToolTipText("");
+        jPanel3.add(vacioDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 200, 20));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 790, 150));
 
         jLabel10.setBackground(new java.awt.Color(242, 240, 235));
         jLabel10.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("PERIODO: (*)");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
         jLabel11.setBackground(new java.awt.Color(242, 240, 235));
         jLabel11.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("CANTIDAD DE ALUMNOS: (*)");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabel12.setBackground(new java.awt.Color(242, 240, 235));
         jLabel12.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("DOCENTE: (*)");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
 
         jLabel13.setBackground(new java.awt.Color(242, 240, 235));
         jLabel13.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("E-MAIL: (*)");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 270, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
 
         jLabel14.setBackground(new java.awt.Color(242, 240, 235));
         jLabel14.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setText("TIPO DE AULA: (*)");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 210, -1, -1));
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, -1, -1));
 
         tipoAula.setBackground(new java.awt.Color(242, 240, 235));
         tipoAula.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tipoAula.setForeground(new java.awt.Color(153, 153, 153));
-        tipoAula.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "MULTIMEDIA", "INFORMATICA", "SIN RECURSOS" }));
+        tipoAula.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "MULTIMEDIOS", "INFORMATICA", "SIN RECURSOS" }));
         tipoAula.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         tipoAula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tipoAulaActionPerformed(evt);
             }
         });
-        jPanel2.add(tipoAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 205, 130, 30));
+        jPanel2.add(tipoAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 235, 150, 30));
 
         periodo.setBackground(new java.awt.Color(242, 240, 235));
         periodo.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         periodo.setForeground(new java.awt.Color(153, 153, 153));
-        periodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "1ER CUATRIMESTRE", "2DO CUATRIMESTRE", "ANUAL" }));
+        periodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Primer Cuatrimestre", "Segundo Cuatrimestre", "Anual" }));
         periodo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         periodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 periodoActionPerformed(evt);
             }
         });
-        jPanel2.add(periodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 145, 130, 30));
+        jPanel2.add(periodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 165, 150, 30));
 
         docente.setBackground(new java.awt.Color(242, 240, 235));
         docente.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         docente.setForeground(new java.awt.Color(153, 153, 153));
-        docente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", " " }));
+        docente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         docente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         docente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 docenteActionPerformed(evt);
             }
         });
-        jPanel2.add(docente, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 265, 130, 30));
+        jPanel2.add(docente, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 315, -1, 30));
 
         catedra.setBackground(new java.awt.Color(242, 240, 235));
         catedra.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         catedra.setForeground(new java.awt.Color(153, 153, 153));
-        catedra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", " " }));
+        catedra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         catedra.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         catedra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 catedraActionPerformed(evt);
             }
         });
-        jPanel2.add(catedra, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 145, 130, 30));
+        jPanel2.add(catedra, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 165, 150, 30));
 
         cantAlumnos.setBackground(new java.awt.Color(242, 240, 235));
         cantAlumnos.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -344,7 +428,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 cantAlumnosKeyPressed(evt);
             }
         });
-        jPanel2.add(cantAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 205, 130, 30));
+        jPanel2.add(cantAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 235, 130, 30));
 
         buscarAula.setBackground(new java.awt.Color(242, 240, 235));
         buscarAula.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -357,14 +441,78 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 buscarAulaActionPerformed(evt);
             }
         });
-        jPanel2.add(buscarAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 480, 140, 30));
+        jPanel2.add(buscarAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 500, 140, 30));
 
         jPanel4.setBackground(new java.awt.Color(242, 240, 235));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 530, 120));
+        jPanel4.setRequestFocusEnabled(false);
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 810, 520));
+        tabla.setFont(new java.awt.Font("Bahnschrift", 0, 11)); // NOI18N
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", ""
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabla.setRowHeight(40);
+        tabla.getTableHeader().setResizingAllowed(false);
+        tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla);
+        if (tabla.getColumnModel().getColumnCount() > 0) {
+            tabla.getColumnModel().getColumn(0).setPreferredWidth(600);
+        }
+
+        jPanel4.add(jScrollPane1);
+
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 390, 630, 130));
+
+        vacioAlumnos.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioAlumnos.setForeground(new java.awt.Color(255, 0, 0));
+        vacioAlumnos.setToolTipText("");
+        jPanel2.add(vacioAlumnos, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 290, 20));
+
+        vacioDocente.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioDocente.setForeground(new java.awt.Color(255, 0, 0));
+        vacioDocente.setToolTipText("");
+        jPanel2.add(vacioDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, 200, 20));
+
+        vacioCatedra.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioCatedra.setForeground(new java.awt.Color(255, 0, 0));
+        vacioCatedra.setToolTipText("");
+        jPanel2.add(vacioCatedra, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 200, 200, 20));
+
+        vacioAula.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioAula.setForeground(new java.awt.Color(255, 0, 0));
+        vacioAula.setToolTipText("");
+        jPanel2.add(vacioAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 270, 200, 20));
+
+        vacioEmail.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioEmail.setForeground(new java.awt.Color(255, 0, 0));
+        vacioEmail.setToolTipText("");
+        jPanel2.add(vacioEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, 200, 20));
+
+        vacioPeriodo.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        vacioPeriodo.setForeground(new java.awt.Color(255, 0, 0));
+        vacioPeriodo.setToolTipText("");
+        jPanel2.add(vacioPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 200, 20));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 810, 540));
 
         cancelar.setBackground(new java.awt.Color(242, 240, 235));
         cancelar.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -377,7 +525,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 cancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 550, 130, 30));
+        jPanel1.add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 560, 130, 30));
 
         confirmar1.setBackground(new java.awt.Color(242, 240, 235));
         confirmar1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -390,7 +538,7 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
                 confirmar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(confirmar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 550, 130, 30));
+        jPanel1.add(confirmar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 560, 130, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -406,17 +554,200 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buscarAulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarAulaActionPerformed
-        ProgresoPopup popup = new ProgresoPopup(this);
-        popup.iniciarSimulacion(); 
-        popup.setVisible(true); 
+    public void guardarReserva(Aula aula){
+        ReservaPDTO reserva = new ReservaPDTO();
         
-        AulasDisponibles aDisponibles = new AulasDisponibles();
-        aDisponibles.setRegistrarReservaPeriodica(this);
-        aDisponibles.setVisible(true);
-        aDisponibles.setLocationRelativeTo(null);
-        aDisponibles.setResizable(false);
-        this.setVisible(false);
+        int cant = Integer.parseInt(cantAlumnos.getText());
+        int dur = Integer.parseInt(duracion.getText());
+        String dia = getSelectedButtonText(grupoDias);
+        String horaString = horaInicio.getText();
+        String horaCompleta = horaString + ":00";
+        Time hora = Time.valueOf(horaCompleta);
+
+        reserva.setAula(aula);
+        reserva.setCantidadAlumnos(cant);
+        reserva.setCatedra((String)catedra.getSelectedItem());
+        reserva.setDia(dia);
+        reserva.setDocente((String)docente.getSelectedItem());
+        reserva.setPeriodo((String)periodo.getSelectedItem());
+        reserva.setDuracion(dur);
+        reserva.setEmail(email.getText());
+        reserva.setHoraInicio(hora);
+        reserva.setTipoAula((String)tipoAula.getSelectedItem());
+        reserva.setBedel(bedel);
+        reservasNoConfirmadas.add(reserva);
+        limpiarDatosReserva();
+        actualizarTabla();
+    }
+    
+    private void buscarAulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarAulaActionPerformed
+
+        limpiarLabels();
+
+        boolean flag = true;
+        boolean campoVacioFecha = false;
+        boolean campoVacioHora = false;
+        boolean campoVacioDuracion = false;
+        boolean campoVacioAlumnos = false;   
+        boolean campoVacioEmail = false;
+        
+        ArrayList<String> datos = new ArrayList();
+        datos.add(horaInicio.getText());
+        datos.add(duracion.getText());     
+        datos.add((String)periodo.getSelectedItem());
+        datos.add(cantAlumnos.getText());
+        datos.add((String)docente.getSelectedItem());
+        datos.add((String)catedra.getSelectedItem());
+        datos.add((String)tipoAula.getSelectedItem());
+        datos.add(email.getText());
+        String dia = getSelectedButtonText(grupoDias);
+        String periodo2 = (String)periodo.getSelectedItem();
+        
+        if(dia == null){
+            vacioDia.setText("DEBE SELECCIONAR UN DIA");
+            flag = false;
+        }
+        
+        for(ReservaPDTO i : reservasNoConfirmadas){
+            if(dia.equals(i.getDia()) && (i.getPeriodo().equals("Anual") || periodo2.equals("Anual"))){
+                mensajeErrorMismoDia();
+                flag=false;
+            }
+            if(dia.equals(i.getDia()) && i.getPeriodo().equals(periodo2)){
+                mensajeErrorMismoDia();
+                flag=false;
+            }
+        }
+        
+        for(int i=0;i<8;i++){
+           if(!validarVacio(datos.get(i))){
+                flag=false;
+                switch(i){
+                    case 0:
+                    vacioHora.setText("ESTE CAMPO ES OBLIGATORIO");
+                    campoVacioHora = true;
+                    break;
+                    case 1:
+                    vacioDuracion.setText("ESTE CAMPO ES OBLIGATORIO");
+                    campoVacioDuracion = true;
+                    break;
+                    case 2:
+                    vacioPeriodo.setText("ESTE CAMPO ES OBLIGATORIO");
+                    break;
+                    case 3:
+                    vacioAlumnos.setText("ESTE CAMPO ES OBLIGATORIO");
+                    campoVacioAlumnos = true;
+                    break;
+                    case 4:
+                    vacioDocente.setText("ESTE CAMPO ES OBLIGATORIO");
+                    break;
+                    case 5:
+                    vacioCatedra.setText("ESTE CAMPO ES OBLIGATORIO");
+                    break;
+                    case 6:
+                    vacioAula.setText("ESTE CAMPO ES OBLIGATORIO");
+                    break;
+                    case 7:
+                    vacioEmail.setText("ESTE CAMPO ES OBLIGATORIO");
+                    campoVacioEmail = true;
+                    break;
+                }
+           }
+        }
+         
+        if(!campoVacioHora){  
+            if(horaInicio.getText().length()==5){
+                if(!validarHora(horaInicio.getText())){
+                    flag = false;
+                    vacioHora.setText("LA HORA INGRESADA NO RESPETA EL FORMATO HH:MM");
+                }
+            }else {
+                vacioHora.setText("LA HORA INGRESADA NO RESPETA EL FORMATO HH:MM");
+                flag = false;
+            }
+        }      
+        
+        if(!campoVacioDuracion){
+            int dur = Integer.parseInt(duracion.getText());
+            if(!((dur % 30==0) && dur!=0)){
+                flag = false;
+                vacioDuracion.setText("LA DURACION DEBE SER MULTIPLO DE 30");
+            }
+        }
+        
+        if(!campoVacioAlumnos){
+            if(!cantAlumnos.getText().matches("[0-9]+")){
+                flag = false;
+                vacioAlumnos.setText("SOLO SE PUEDEN INGRESAR NUMEROS");
+            }else{
+                int cant = Integer.parseInt(cantAlumnos.getText());
+                if(cant<1){
+                    flag = false;
+                    vacioAlumnos.setText("LA CANTIDAD DEBE SER MAYOR A 0");
+                }
+            }
+        }
+        
+        if(!campoVacioEmail){  
+            if(!esEmailValido(email.getText())){
+                flag = false;
+                vacioEmail.setText("DEBE CUMPLIR EL FORMATO: XXXX@XXXX.XXX");
+            }
+        }
+        
+        if(flag){
+            try{
+                int cap = gAula.obtenerMaxCapacidad((String)tipoAula.getSelectedItem());
+                int cant = Integer.parseInt(cantAlumnos.getText()); 
+                if(cant>cap){
+                    ProgresoPopup popup = new ProgresoPopup(this);
+                    popup.iniciarSimulacion();
+                    popup.setVisible(true);
+                    mensajeErrorCapacidad();
+                    flag=false;
+                }         
+            }catch (SQLException ex) {
+                flag=false;
+                mensajeErrorBd();
+            }catch (ClassNotFoundException ex) {
+                flag=false;
+                mensajeErrorBd();
+            }  
+        }
+        
+        if(flag){
+            ArrayList lista = new ArrayList<>();
+            GestorAula gestorAula = new GestorAula();
+            String periodo1 = (String)periodo.getSelectedItem();
+             try {
+                lista = gestorAula.obtenerDisponibilidadAulas(dia,horaInicio.getText(),duracion.getText(),periodo1,cantAlumnos.getText(),(String)docente.getSelectedItem(),email.getText(),(String)catedra.getSelectedItem(),(String)tipoAula.getSelectedItem());
+                ProgresoPopup popup = new ProgresoPopup(this);
+                popup.iniciarSimulacion();
+                popup.setVisible(true);
+                
+                if(lista.getFirst() instanceof  Aula){
+                    AulasDisponibles aDisponibles = new AulasDisponibles(lista,dia,periodo1);
+                    aDisponibles.setRegistrarReservaPeriodica(this);
+                    aDisponibles.setVisible(true);
+                    aDisponibles.setLocationRelativeTo(null);
+                    aDisponibles.setResizable(false);
+                    this.setVisible(false);
+                }else{
+                    AulasSolapadas aSolapadas = new AulasSolapadas(lista);
+                    aSolapadas.setRegistrarReservaPeriodica(this);
+                    aSolapadas.setVisible(true);
+                    aSolapadas.setLocationRelativeTo(null);
+                    aSolapadas.setResizable(false);
+                    this.setVisible(false);
+                }
+                
+             } catch (SQLException ex) {
+                mensajeErrorBd();
+             } catch (ClassNotFoundException ex) {
+                mensajeErrorBd();
+             }  
+        }
+        
     }//GEN-LAST:event_buscarAulaActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
@@ -473,7 +804,26 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
     }//GEN-LAST:event_cantAlumnosKeyPressed
 
     private void confirmar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmar1ActionPerformed
-        // TODO add your handling code here:
+        boolean retorno = true;
+        if(!reservasNoConfirmadas.isEmpty()){
+            try {
+                retorno = gReserva.registrarReservaPeriodica(reservasNoConfirmadas);
+                if(retorno){
+                    mensajeExito();
+                    limpiarDatosCompletos();
+                    this.reservasNoConfirmadas.clear();
+                    actualizarTabla();
+                }else{
+                    mensajeError();
+                }
+            } catch (SQLException ex) {
+                mensajeErrorBd();
+            } catch (ClassNotFoundException ex) {
+                mensajeErrorBd();
+            }
+        }else{
+            mensajeErrorReservas();
+        }
     }//GEN-LAST:event_confirmar1ActionPerformed
 
     private void horaInicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_horaInicioKeyPressed
@@ -517,8 +867,148 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_indicacionHoraActionPerformed
 
- 
+    
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        int fila = tabla.rowAtPoint(evt.getPoint());
+        int columna = tabla.columnAtPoint(evt.getPoint());
 
+        if(columna == 1){
+            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tabla.getModel();
+            model.removeRow(fila);
+
+            Iterator<ReservaPDTO> iterador = reservasNoConfirmadas.iterator();
+            int i=0;
+            while (iterador.hasNext()){
+                iterador.next();
+                if(i==fila){
+                    iterador.remove();
+                }
+                i++;
+            }
+            actualizarTabla();
+        }
+    }//GEN-LAST:event_tablaMouseClicked
+    
+    public boolean validarVacio(String str){
+        boolean flag=true;
+        if(str.isBlank() || str.equals("Escribe aquí...") || str.equals("Seleccionar") ||str.equals("HH:MM")){
+            flag=false;
+        }
+       return flag;  
+    }
+    
+    public static String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements(); ) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return null; // Si no hay nada seleccionado
+    }
+    
+    public void limpiarDatosReserva(){
+        horaInicio.setText("HH:MM");
+        duracion.setText("Escribe aquí...");
+        cantAlumnos.setText("Escribe aquí...");
+        catedra.setSelectedItem("Seleccionar");
+        tipoAula.setSelectedItem("Seleccionar");
+        periodo.setSelectedItem("Seleccionar");
+        grupoDias.clearSelection();
+    }
+    
+    public void limpiarDatosCompletos(){
+        horaInicio.setText("HH:MM");
+        docente.setSelectedItem("Seleccionar");
+        email.setText("Escribe aquí...");
+        duracion.setText("Escribe aquí...");
+        cantAlumnos.setText("Escribe aquí...");
+        catedra.setSelectedItem("Seleccionar");
+        tipoAula.setSelectedItem("Seleccionar");
+        periodo.setSelectedItem("Seleccionar");
+        grupoDias.clearSelection();
+    }
+    
+    public void limpiarLabels(){
+        vacioDia.setText("");
+        vacioHora.setText("");
+        vacioDuracion.setText("");
+        vacioAlumnos.setText("");
+        vacioEmail.setText("");
+        vacioDocente.setText("");
+        vacioCatedra.setText("");
+        vacioAula.setText("");
+        vacioPeriodo.setText("");
+        
+    }
+
+    public void mensajeExito(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "SE GUARDARON LAS RESERVAS CORRECTAMENTE.","",
+            JOptionPane.PLAIN_MESSAGE, getIcon("/aceptar.png",32,32));
+    }
+    
+    public void mensajeErrorMismoDia(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "EN LA LISTA DE RESERVAS YA HAY RESREVAS PARA ESE DIA EN ESE PERIODO. CONFIRME E INTENTE NUEVAMENTE.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeErrorCapacidad(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "NO EXISTEN AULAS CON ESA CAPACIDAD.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeErrorBd(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "LO SENTIMOS, HUBO UN ERROR EN LA BASE DE DATOS Y NO SE PUDO REGISTRAR LA RESERVA","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeErrorReservas(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "NO HAY RESERVAS POR GUARDAR","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeError(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "NO SE GUARDARON LAS RESERVAS CORRECTAMENTE","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void actualizarTabla(){
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tabla.getModel();
+        Iterator<ReservaPDTO> iterador = reservasNoConfirmadas.iterator();
+        model.setRowCount(0);
+        while (iterador.hasNext()) {
+            ReservaPDTO siguiente = iterador.next();
+            String dia = siguiente.getDia();
+            String periodo = siguiente.getPeriodo().toUpperCase();
+            String hora = siguiente.getHoraInicio().getHours() + ":" + siguiente.getHoraInicio().getMinutes();
+            if(siguiente.getHoraInicio().getMinutes() == 0){
+                hora = hora + "0";
+            }
+            String datos = "RESERVÓ EL AULA " + siguiente.getAula().getNumero() + " PARA LOS DIAS " + dia + " EN EL PERIODO " + periodo + "  A LAS " + hora + " HS";
+
+            model.addRow(new Object[]{datos,null}); // Agregar datos y texto del botón
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarAula;
     private javax.swing.JButton cancelar;
@@ -544,13 +1034,47 @@ public class RegistrarReservaPeriodica extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton jueves;
     private javax.swing.JRadioButton lunes;
     private javax.swing.JRadioButton martes1;
     private javax.swing.JRadioButton miercoles;
     private javax.swing.JComboBox<String> periodo;
     private javax.swing.JRadioButton sabado;
+    private javax.swing.JTable tabla;
     private javax.swing.JComboBox<String> tipoAula;
+    private javax.swing.JLabel vacioAlumnos;
+    private javax.swing.JLabel vacioAula;
+    private javax.swing.JLabel vacioCatedra;
+    private javax.swing.JLabel vacioDia;
+    private javax.swing.JLabel vacioDocente;
+    private javax.swing.JLabel vacioDuracion;
+    private javax.swing.JLabel vacioEmail;
+    private javax.swing.JLabel vacioHora;
+    private javax.swing.JLabel vacioPeriodo;
     private javax.swing.JRadioButton viernes;
     // End of variables declaration//GEN-END:variables
+
+    private Icon getIcon(String ruta, int w, int h) {
+        return new ImageIcon(new ImageIcon(getClass().getResource(ruta))
+                .getImage().getScaledInstance(w, h, 0));
+    }
+    
+    private class ActionCellRenderer extends JPanel implements TableCellRenderer {
+        URL imageUrl = ActionCellRenderer.class.getResource("/cancelar.png");
+        ImageIcon icono = new ImageIcon(imageUrl);
+        
+        private final JButton deleteButton = new JButton(icono);
+
+        public ActionCellRenderer() {
+            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            add(deleteButton);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            return this;
+        }
+    }
+
+
 }

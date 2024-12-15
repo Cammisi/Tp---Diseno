@@ -30,6 +30,8 @@ public class BuscarBedel extends javax.swing.JFrame {
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.setRowSelectionAllowed(true); 
         jTable1.setColumnSelectionAllowed(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -63,7 +65,7 @@ public class BuscarBedel extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(242, 240, 235));
         jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("TURNO: (*)");
+        jLabel1.setText("TURNO:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, -1, -1));
 
         jLabel7.setBackground(new java.awt.Color(242, 240, 235));
@@ -75,7 +77,7 @@ public class BuscarBedel extends javax.swing.JFrame {
         jLabel2.setBackground(new java.awt.Color(242, 240, 235));
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("APELLIDO: (*)");
+        jLabel2.setText("APELLIDO:");
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
 
         apellido.setBackground(new java.awt.Color(242, 240, 235));
@@ -246,30 +248,38 @@ public class BuscarBedel extends javax.swing.JFrame {
         String apellido1 = apellido.getText();
         String turno1 = (String)turno.getSelectedItem();
         ArrayList<BedelDTO> bedeles = new ArrayList<>();
-          
    
         try {
             bedeles = gBedel.buscarBedeles(apellido1,turno1);
+            if(bedeles.isEmpty()){
+                mensajeFracaso();
+            }else{
+                cargarDatos(bedeles);
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(BuscarBedel.class.getName()).log(Level.SEVERE, null, ex);
+            mensajeFracasoBd();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BuscarBedel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-        if(bedeles.isEmpty()){
-            mensajeFracaso();
-        }else{
-            cargarDatos(bedeles);
-        }
+            mensajeFracasoBd();
+        } 
     }//GEN-LAST:event_buscarActionPerformed
 
     private void modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarActionPerformed
-        ModificarBedel rBedel = new ModificarBedel();
-        rBedel.setBuscarBedel(this);
-        rBedel.setVisible(true);
-        rBedel.setLocationRelativeTo(null);
-        rBedel.setResizable(false);
-        this.setVisible(false);
+        int fila = jTable1.getSelectedRow();
+        
+        if(fila!=-1){
+            String[] datosBedel = new String[4];
+            datosBedel = recuperarFila(fila);
+
+            ModificarBedel rBedel = new ModificarBedel(datosBedel,mAdm);
+            //rBedel.setBuscarBedel(this);
+            rBedel.setVisible(true);
+            rBedel.setLocationRelativeTo(null);
+            rBedel.setResizable(false);
+            this.setVisible(false);
+        }else{
+            mensajeNoSelecciona();
+        }
+        
     }//GEN-LAST:event_modificarActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
@@ -283,13 +293,12 @@ public class BuscarBedel extends javax.swing.JFrame {
         if(fila!=-1){
             String[] datosBedel = new String[4];
             datosBedel = recuperarFila(fila);
-            
-            EliminarBedel eBedel = new EliminarBedel();
-            eBedel.setBuscarBedel(this);
+            EliminarBedel eBedel = new EliminarBedel(datosBedel,mAdm); 
             eBedel.setVisible(true);
             eBedel.setLocationRelativeTo(null);
             eBedel.setResizable(false);
             this.setVisible(false);
+            
         }else{
             mensajeNoSelecciona();
         }
@@ -322,6 +331,14 @@ public class BuscarBedel extends javax.swing.JFrame {
                 JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
     }
     
+    public void mensajeFracasoBd(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "LO SENTIMOS, HUBO UN ERROR EN LA BASE DE DATOS Y NO SE PUDO ENCONTRAR EL BEDEL.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+     
     private void cargarDatos(ArrayList<BedelDTO> bedeles) {
         // Obtén el modelo de la tabla
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();

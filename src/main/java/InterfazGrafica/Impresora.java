@@ -14,6 +14,7 @@ public class Impresora extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        opcionImpresion = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -41,20 +42,20 @@ public class Impresora extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("IMPRESORA: (*)");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 70, 150, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 150, 30));
 
         jLabel2.setBackground(new java.awt.Color(242, 240, 235));
         jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("COPIAS: (*)");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, 120, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 120, 20));
 
         jComboBox1.setBackground(new java.awt.Color(242, 240, 235));
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ESCRIBA AQUI" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 130, 20));
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, 40, -1));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 130, 20));
+        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 160, 50, -1));
 
         jPanel2.setBackground(new java.awt.Color(242, 240, 235));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -67,6 +68,7 @@ public class Impresora extends javax.swing.JFrame {
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 150, 30));
 
         horizontal.setBackground(new java.awt.Color(242, 240, 235));
+        opcionImpresion.add(horizontal);
         horizontal.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         horizontal.setForeground(new java.awt.Color(0, 0, 0));
         horizontal.setText("HORIZONTAL");
@@ -78,9 +80,10 @@ public class Impresora extends javax.swing.JFrame {
                 horizontalActionPerformed(evt);
             }
         });
-        jPanel2.add(horizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 100, 40));
+        jPanel2.add(horizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 110, 40));
 
         automatica.setBackground(new java.awt.Color(242, 240, 235));
+        opcionImpresion.add(automatica);
         automatica.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         automatica.setForeground(new java.awt.Color(0, 0, 0));
         automatica.setText("AUTOMATICA");
@@ -92,9 +95,10 @@ public class Impresora extends javax.swing.JFrame {
                 automaticaActionPerformed(evt);
             }
         });
-        jPanel2.add(automatica, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 100, 40));
+        jPanel2.add(automatica, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 110, 40));
 
         vertical.setBackground(new java.awt.Color(242, 240, 235));
+        opcionImpresion.add(vertical);
         vertical.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         vertical.setForeground(new java.awt.Color(0, 0, 0));
         vertical.setText("VERTICAL");
@@ -106,7 +110,7 @@ public class Impresora extends javax.swing.JFrame {
                 verticalActionPerformed(evt);
             }
         });
-        jPanel2.add(vertical, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 100, 40));
+        jPanel2.add(vertical, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 80, 40));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 470, 190));
 
@@ -195,6 +199,7 @@ public class Impresora extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.ButtonGroup opcionImpresion;
     private javax.swing.JRadioButton vertical;
     // End of variables declaration//GEN-END:variables
 }

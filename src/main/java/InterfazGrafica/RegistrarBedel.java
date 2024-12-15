@@ -519,19 +519,20 @@ public class RegistrarBedel extends javax.swing.JFrame {
             String turnoS=(String)turno.getSelectedItem();
             try {
                 validarGeneral=gestorBedel.crearBedel(nombre1.getText(), apellido.getText(),turnoS,usuario.getText(), contraseña.getText(),confirmarContraseña.getText());
+                if(validarGeneral){
+                    mensajeExito();
+                    limpiarDatosBedel();
+                    limpiarLabels();
+                }else{
+                    mensajeFracasoExisteBedel();
+                }
             } catch (SQLException ex) {
-                Logger.getLogger(RegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
+                mensajeFracaso();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(RegistrarBedel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            if(validarGeneral){
-                mensajeExito();
-                limpiarDatosBedel();
-                limpiarLabels();
-            }else{
                 mensajeFracaso();
             }
+
+            
         }
     }//GEN-LAST:event_confirmarActionPerformed
 
@@ -586,7 +587,15 @@ public class RegistrarBedel extends javax.swing.JFrame {
         UIManager.put("OptionPane.background", new Color(242,240,235));
         //UIManager.put("Panel.background", new Color(242,240,235));
         UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
-        JOptionPane.showMessageDialog(null, "NO SE PUDO REGISTRAR EL BEDEL.","¡ALGO SALIO MAL!",
+        JOptionPane.showMessageDialog(null, "LO SENTIMOS, HUBO UN ERROR EN LA BASE DE DATOS Y NO SE PUDO REGISTRAR EL BEDEL.","¡ALGO SALIO MAL!",
+                JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
+    }
+    
+    public void mensajeFracasoExisteBedel(){
+        UIManager.put("OptionPane.background", new Color(242,240,235));
+        //UIManager.put("Panel.background", new Color(242,240,235));
+        UIManager.put("OptionPane.messageFont", new Font("Bahnschirift",Font.BOLD,14));
+        JOptionPane.showMessageDialog(null, "ESE NOMBRE DE USUARIO YA EXISTE.","¡ALGO SALIO MAL!",
                 JOptionPane.PLAIN_MESSAGE, getIcon("/cancelar.png",32,32));
     }
     
